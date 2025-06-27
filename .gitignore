@@ -1,0 +1,4 @@
+__pycache__/
+/dist/
+/minnt.egg-info/
+/venv/

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minnt"
+version = "0.0.1a0"
+authors = [
+  { name="Milan Straka", email="milan@strakovi.com" },
+]
+description = "Minimalistic Neural Network Trainer"
+readme = "README.md"
+license = { text="MPL-2.0" }
+classifiers = [
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.10"
+dependencies = [
+  # TensorBoard for inspecting logs
+  "tensorboard ~= 2.19.0",
+  # Conditionally install imghdr removed in Python 3.13, TensorBoard needs it
+  "standard-imghdr; python_version>='3.13'",
+]
+
+[project.optional-dependencies]
+torch = [
+  "torch",
+  "torchaudio",
+  "torchvision",
+]
+
+[project.urls]
+Homepage = "https://minnt.org"
+Repository = "https://github.com/foxik/minnt"
+
+[tool.setuptools]
+license-files = [ "LICENSE" ]
