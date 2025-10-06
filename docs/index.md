@@ -1,6 +1,11 @@
-# Introduction
+<div style="float: right; width: 40%; text-align: center"><img src="images/leaf-green.svg" style="height: 11em"></div>
 
-This is the documentation of the Minnt framework.
+# Minnt
+
+**Minnt** is <s style="color: #777">**Mi**lan's</s> **Mi**nimalistic **N**eural **N**etwork
+**T**rainer for PyTorch inspired by Keras.
+
+<hr style="clear: both">
 
 The central class in Minnt is the [TrainableModule](trainable_module.md) providing:
 

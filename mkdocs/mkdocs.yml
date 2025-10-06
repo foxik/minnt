@@ -4,7 +4,7 @@ repo_url: https://github.com/foxik/minnt
 docs_dir: ../docs
 watch: [../minnt]
 nav:
-- index.md
+- Minnt: index.md
 - transformed_dataset.md
 - utilities.md
 - vocabulary.md
