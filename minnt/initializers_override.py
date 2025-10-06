@@ -108,12 +108,11 @@ def global_keras_initializers(
       orthogonal for recurrent weights, zeros for biases (with LSTM forget gate bias set to 1).
 
     Furthermore, for batch normalization layers, the default momentum value is changed
-    from 0.1 to the Keras default of 0.01 (or any other value specified, or left unchanged
-    if `None` is passed).
+    from 0.1 to the Keras default of 0.01 (or any other value specified).
 
     Finally, for batch normalization, layer normalization, and group normalization layers,
     the default epsilon value is changed from 1e-5 to the Keras default of 1e-3
-    (or any other value specified, or left unchanged if `None` is passed).
+    (or any other value specified).
 
     Parameters:
      parameter_initialization: If True, override the default PyTorch initializers with Keras defaults.
