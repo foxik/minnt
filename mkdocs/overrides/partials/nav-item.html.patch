@@ -1,0 +1,12 @@
+--- /work/ufal/minnt/mkdocs/venv/lib/python3.11/site-packages/material/templates/partials/nav-item.html	2025-10-06 20:18:00.204347807 +0200
++++ nav-item.html	2025-10-06 20:41:16.958346352 +0200
+@@ -42,6 +42,9 @@
+ {% endmacro %}
+ {% macro render(nav_item, path, level, parent) %}
+   {% set class = "md-nav__item" %}
++  {% if nav_item.meta and nav_item.meta.section %}
++    <li class="md-nav__link"><label class="md-nav__title" style="padding-left: 0; padding-top: 1em">{{ nav_item.meta.section }}</label>
++  {% endif %}
+   {% if nav_item.active %}
+     {% set class = class ~ " md-nav__item--active" %}
+   {% endif %}
