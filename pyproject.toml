@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,9 +10,9 @@ authors = [
 ]
 description = "Minimalistic Neural Network Trainer"
 readme = "README.md"
-license = { text="MPL-2.0" }
+license = "mpl-2.0"
+license-files = ["LICENSE"]
 classifiers = [
-    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     "Programming Language :: Python :: 3",
 ]
 requires-python = ">= 3.10"
@@ -30,6 +30,3 @@ torch = [
 [project.urls]
 Homepage = "https://minnt.org"
 Repository = "https://github.com/foxik/minnt"
-
-[tool.setuptools]
-license-files = [ "LICENSE" ]
