@@ -5,6 +5,7 @@ docs_dir: ../docs
 watch: [../minnt]
 nav:
 - Minnt: index.md
+- trainable_module.md
 - transformed_dataset.md
 - utilities.md
 - vocabulary.md
