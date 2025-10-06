@@ -1,6 +1,6 @@
 # Minnt
 
-<img src="https://minnt.org/images/leaf-green-noborder.svg" alt="Leaf illustration" align="right" style="height: 8em">
+<img src="https://minnt.org/images/leaf-green-noborder.svg" alt="" align="right" width="150">
 
 **Minnt** is <s>**Mi**lan's</s> **Mi**nimalistic **N**eural **N**etwork **T**rainer for PyTorch inspired by Keras.
 
