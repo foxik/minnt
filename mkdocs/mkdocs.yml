@@ -1,0 +1,59 @@
+site_name: Minnt Framework
+site_url: https://minnt.org/docs/
+repo_url: https://github.com/foxik/minnt
+docs_dir: ../docs
+watch: [../minnt]
+nav:
+- index.md
+- transformed_dataset.md
+- utilities.md
+- vocabulary.md
+plugins:
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        paths:
+        - ../
+        inventories:
+        - https://docs.python.org/3/objects.inv
+        - https://pytorch.org/docs/stable/objects.inv
+        options:
+          docstring_section_style: list
+          members_order: source
+          group_by_category: false
+          show_root_heading: true
+          show_symbol_type_toc: true
+          show_symbol_type_heading: true
+          show_signature_annotations: true
+          separate_signature: true
+          signature_crossrefs: true
+          line_length: 80
+theme:
+  name: material
+  logo: images/leaf-green.svg
+  favicon: images/leaf-green.svg
+  features:
+    - navigation.top
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+extra:
+  generator: false
+  homepage: https://minnt.org

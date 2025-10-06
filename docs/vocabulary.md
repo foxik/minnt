@@ -1,0 +1,3 @@
+# Vocabulary
+
+::: minnt.Vocabulary
