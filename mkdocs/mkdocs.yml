@@ -56,3 +56,5 @@ theme:
       name: Switch to system preference
 extra:
   generator: false
+extra_css:
+- stylesheets/extra.css
