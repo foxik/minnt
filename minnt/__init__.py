@@ -6,6 +6,7 @@
 
 # Utils
 from .initializers_override import global_keras_initializers
+from .startup import startup
 
 # Version
 from .version import __version__
