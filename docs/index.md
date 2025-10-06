@@ -38,7 +38,7 @@ Finally, several [utilities](utilities.md) are provided.
 ::: minnt.__version__
     options:
       heading: "The Minnt version"
-      heading_level: 3
+      heading_level: 2
       toc_label: "Version"
       show_labels: false
       show_symbol_type_toc: false
