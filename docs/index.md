@@ -11,11 +11,11 @@ title: Minnt
 **Minnt** is <s style="color: #777">**Mi**lan's</s> **Mi**nimalistic **N**eural **N**etwork
 **T**rainer for PyTorch inspired by Keras.
 
-<hr style="clear: both">
+Install using:
 
-```sh
-pip install minnt --extra-index-url=https://download.pytorch.org/whl/cu128 torch torchvision
-```
+<pre style="clear: both"><code>pip install minnt --extra-index-url=https://download.pytorch.org/whl/cu128 torch torchvision</code></pre>
+
+---
 
 The central class in Minnt is the [TrainableModule](trainable_module.md) providing:
 
