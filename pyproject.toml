@@ -13,7 +13,13 @@ readme = "README.md"
 license = "mpl-2.0"
 license-files = ["LICENSE"]
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering",
 ]
 requires-python = ">= 3.10"
 dependencies = [
