@@ -7,6 +7,10 @@
 
 <hr style="clear: both">
 
+```sh
+pip install minnt --extra-index-url=https://download.pytorch.org/whl/cu128 torch torchvision
+```
+
 The central class in Minnt is the [TrainableModule](trainable_module.md) providing:
 
 - high-level training, evaluation, and prediction API, including automatic device management;
