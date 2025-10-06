@@ -1,5 +1,5 @@
 site_name: Minnt Framework
-site_url: https://minnt.org/docs/
+site_url: https://minnt.org/
 repo_url: https://github.com/foxik/minnt
 docs_dir: ../docs
 watch: [../minnt]
@@ -56,4 +56,3 @@ theme:
       name: Switch to system preference
 extra:
   generator: false
-  homepage: https://minnt.org
