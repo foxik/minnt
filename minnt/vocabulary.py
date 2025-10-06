@@ -26,8 +26,8 @@ class Vocabulary:
     def __init__(self, strings: Sequence[str], add_unk: bool = False) -> None:
         """Initializes the vocabulary with the given list of strings.
 
-        The `Vocabulary.PAD` is always the first token in the vocabulary;
-        `Vocabulary.UNK` is the second token but only when `add_unk=True`.
+        The [Vocabulary.PAD][minnt.Vocabulary.PAD] is always the first token in the vocabulary;
+        [Vocabulary.UNK][minnt.Vocabulary.UNK] is the second token but only when `add_unk=True`.
         """
         self._strings = ["[PAD]"] + (["[UNK]"] if add_unk else [])
         self._strings.extend(strings)
