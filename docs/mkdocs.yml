@@ -35,7 +35,7 @@ theme:
   name: material
   logo: images/leaf-green.svg
   favicon: images/leaf-green.svg
-  custom_dir: overrides
+  custom_dir: template
   features:
   - navigation.top
   palette:
