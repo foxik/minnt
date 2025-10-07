@@ -14,6 +14,10 @@ install: site
 serve: $(prerequisities)
 	venv/bin/mkdocs serve -a localhost:1234
 
+venv:
+	python3 -m venv venv
+	venv/bin/pip install --no-cache-dir black mkdocs-material mkdocstrings-python
+
 .PHONY: clean
 clean:
 	rm -rf site/
