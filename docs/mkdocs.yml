@@ -31,6 +31,8 @@ plugins:
           separate_signature: true
           signature_crossrefs: true
           line_length: 80
+          extensions:
+          - griffe_inherited_docstrings
 theme:
   name: material
   logo: images/leaf-green.svg
