@@ -8,8 +8,8 @@ nav:
 - examples.md
 - trainable_module.md
 - transformed_dataset.md
-- vocabulary.md
 - utilities.md
+- vocabulary.md
 plugins:
 - mkdocstrings:
     default_handler: python
