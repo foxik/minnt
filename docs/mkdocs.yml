@@ -11,6 +11,10 @@ nav:
 - type_aliases.md
 - utilities.md
 - vocabulary.md
+- Loggers:
+  - logger.md
+  - loggers/filesystem_logger.md
+  - loggers/tensorboard_logger.md
 plugins:
 - mkdocstrings:
     default_handler: python
