@@ -9,14 +9,17 @@ from typing import Any, TypeAlias
 import numpy as np
 import torch
 
+
 AnyArray: TypeAlias = torch.Tensor | np.ndarray | list | tuple
 """A type alias for any array-like structure.
 
 PyTorch tensors, NumPy arrays, lists, and tuples are supported.
 """
 
+
 Tensor: TypeAlias = torch.Tensor | torch.nn.utils.rnn.PackedSequence
 """A type alias for a single tensor or a packed sequence of tensors."""
+
 
 TensorOrTensors: TypeAlias = Tensor | tuple[Tensor, ...] | list[Tensor] | Any
 """A type alias for a single tensor/packed sequence of a sequence of them.
