@@ -7,6 +7,9 @@
 # Datasets
 from .transformed_dataset import TransformedDataset
 
+# Type aliases
+from .type_aliases import AnyArray, Tensor, TensorOrTensors
+
 # Vocabulary
 from .vocabulary import Vocabulary
 

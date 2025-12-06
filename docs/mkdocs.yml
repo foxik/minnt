@@ -8,6 +8,7 @@ nav:
 - examples.md
 - trainable_module.md
 - transformed_dataset.md
+- type_aliases.md
 - utilities.md
 - vocabulary.md
 plugins:
