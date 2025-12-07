@@ -5,3 +5,4 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from .filesystem_logger import FileSystemLogger
 from .tensorboard_logger import TensorBoardLogger
+from .wandb_logger import WandbLogger
