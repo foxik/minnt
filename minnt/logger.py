@@ -3,8 +3,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""An abstract logger interface for logging metrics and other information.
-"""
 from typing import Any, Self
 
 import torch
@@ -13,6 +11,8 @@ from .type_aliases import AnyArray, TensorOrTensors
 
 
 class Logger:
+    """An abstract logger interface for logging metrics and other information."""
+
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
         """Log the given audio with the given label at the given epoch.
 

@@ -3,13 +3,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""A TensorBoard logger interface.
-
-In addition to implementing the [Logger][minnt.Logger] interface, it provides
-a method for obtaining the underlying TensorBoard
-[SummaryWriter][torch.utils.tensorboard.writer.SummaryWriter] instance for a given
-writer name.
-"""
 import json
 import os
 from typing import Any, Self
@@ -22,6 +15,13 @@ from ..type_aliases import AnyArray, TensorOrTensors
 
 
 class TensorBoardLogger(Logger):
+    """A TensorBoard logger interface.
+
+    In addition to implementing the [Logger][minnt.Logger] interface, it provides
+    a method for obtaining the underlying TensorBoard
+    [SummaryWriter][torch.utils.tensorboard.writer.SummaryWriter] instance for a given
+    writer name.
+    """
     def __init__(self, logdir: str) -> None:
         """Initialize the TensorBoard logger.
 

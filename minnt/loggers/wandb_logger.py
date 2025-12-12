@@ -3,10 +3,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-"""A Wandb logger interface.
-
-The text values are by default also logged as HTML for better visualization.
-"""
 import html
 import json
 from typing import Any, Self
@@ -18,6 +14,10 @@ from ..type_aliases import AnyArray, TensorOrTensors
 
 
 class WandbLogger(Logger):
+    """A Wandb logger interface.
+
+    The text values are by default also logged as HTML for better visualization.
+    """
     def __init__(self, project: str, *, text_also_as_html: bool = True, **kwargs: dict[str, Any]) -> None:
         """Create the WandbLogger with the given project name.
 
