@@ -12,10 +12,10 @@ from typing import Any, Self, TextIO
 import wave
 import zlib
 
+import torch
+
 from ..logger import Logger
 from ..type_aliases import AnyArray, TensorOrTensors
-
-import torch
 
 
 class FileSystemLogger(Logger):

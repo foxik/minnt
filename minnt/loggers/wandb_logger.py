@@ -11,10 +11,10 @@ import html
 import json
 from typing import Any, Self
 
+import torch
+
 from ..logger import Logger
 from ..type_aliases import AnyArray, TensorOrTensors
-
-import torch
 
 
 class WandbLogger(Logger):

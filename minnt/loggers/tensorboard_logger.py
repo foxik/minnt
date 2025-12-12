@@ -14,11 +14,11 @@ import json
 import os
 from typing import Any, Self
 
-from ..logger import Logger
-from ..type_aliases import AnyArray, TensorOrTensors
-
 import torch
 import torch.utils.tensorboard
+
+from ..logger import Logger
+from ..type_aliases import AnyArray, TensorOrTensors
 
 
 class TensorBoardLogger(Logger):
