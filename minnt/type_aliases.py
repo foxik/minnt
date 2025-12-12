@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 """Types and type aliases used by Minnt."""
-from typing import Any, Protocol, TypeAlias
+from typing import Any, Literal, Protocol, TypeAlias
 
 import numpy as np
 import torch
@@ -30,6 +30,9 @@ Logs: TypeAlias = dict[str, float | torch.Tensor | np.ndarray | HasCompute]
 
 When the logs are returned by the TrainableModule, they are always just float values.
 """
+
+Reduction: TypeAlias = Literal["mean", "sum", "none"]
+"""A type alias for reduction methods used in losses and metrics."""
 
 
 Tensor: TypeAlias = torch.Tensor | torch.nn.utils.rnn.PackedSequence
