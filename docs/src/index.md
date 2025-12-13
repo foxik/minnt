@@ -28,7 +28,7 @@ per-example and per-batch transformation functions on a given dataset, and
 simplifies the creation of a corresponding dataloader (in a multi-GPU setting if
 required).
 
-Furthermore, the package contains a collection of losses and metrics; however,
+Furthermore, the package contains a collection of [losses](loss.md) and metrics; however,
 losses from PyTorch and metrics from [torchmetrics](https://lightning.ai/docs/torchmetrics/stable/)
 can also be used directly.
 

@@ -16,6 +16,8 @@ nav:
   - loggers/filesystem_logger.md
   - loggers/tensorboard_logger.md
   - loggers/wandb_logger.md
+- Losses:
+  - loss.md
 plugins:
 - mkdocstrings:
     default_handler: python

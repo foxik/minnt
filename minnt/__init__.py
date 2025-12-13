@@ -23,3 +23,6 @@ from .version import __version__
 # Loggers
 from .logger import Logger
 from . import loggers
+
+# Losses
+from .loss import Loss
