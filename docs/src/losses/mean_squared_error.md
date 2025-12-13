@@ -1,0 +1,3 @@
+# MeanSquaredError
+
+::: minnt.losses.MeanSquaredError

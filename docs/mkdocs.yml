@@ -18,6 +18,7 @@ nav:
   - loggers/wandb_logger.md
 - Losses:
   - loss.md
+  - losses/mean_squared_error.md
 plugins:
 - mkdocstrings:
     default_handler: python

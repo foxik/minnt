@@ -1,0 +1,59 @@
+# This file is part of Minnt <http://github.com/foxik/minnt/>.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import torch
+
+from ..loss import Loss
+from ..type_aliases import Reduction
+
+mse_loss = torch.nn.functional.mse_loss
+
+
+class MeanSquaredError(Loss):
+    """Mean squared error loss implementation."""
+
+    def __init__(self, *, reduction: Reduction = "mean") -> None:
+        """Create the MeanSquaredError object with the specified reduction method.
+
+        Parameters:
+          reduction: The reduction method to apply to the computed loss.
+        """
+
+        self._reduction = reduction
+
+    def __call__(
+        self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
+    ) -> torch.Tensor:
+        """Compute the MSE loss, optionally with sample weights.
+
+        Parameters:
+          y: The predicted outputs. Their shape either has to be exactly the same as `y_true` (no broadcasting),
+            or can contain an additional single dimension of size 1.
+          y_true: The ground-truth targets.
+          sample_weights: Optional sample weights. If provided, their shape must be broadcastable
+            to a prefix of a shape of `y_true`, and the loss for each sample is weighted accordingly.
+
+        Returns:
+          A tensor representing the computed loss. A scalar tensor if reduction is `"mean"` or `"sum"`;
+            otherwise (if reduction is `"none"`), a tensor of the same shape as `y_true`.
+        """
+        # First match `y` and `y_true` shapes, optionally squeezing one singleton dimension in `y`.
+        y_shape, y_true_shape = y.shape, y_true.shape
+        if len(y_shape) == len(y_true_shape) + 1:
+            singleton_dim = 0
+            while singleton_dim < len(y_true_shape) and y_shape[singleton_dim] == y_true_shape[singleton_dim]:
+                singleton_dim += 1
+            if y_shape[singleton_dim] == 1:
+                y = y.squeeze(dim=singleton_dim)
+        assert y.shape == y_true.shape, f"Shapes of y {y.shape} and y_true {y_true.shape} have to match " \
+            "up to one singleton dimension in y."
+
+        if sample_weights is not None:
+            while sample_weights.dim() < y_true.dim():
+                sample_weights = sample_weights.unsqueeze(dim=-1)
+            if sample_weights.shape != y_true_shape:
+                sample_weights = sample_weights.expand(y_true_shape)
+
+        return mse_loss(y, y_true, reduction=self._reduction, weight=sample_weights)

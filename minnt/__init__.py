@@ -26,3 +26,4 @@ from . import loggers
 
 # Losses
 from .loss import Loss
+from . import losses
