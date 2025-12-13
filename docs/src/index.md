@@ -20,8 +20,8 @@ The central class in Minnt is the [TrainableModule](trainable_module.md) providi
 - high-level training, evaluation, and prediction API, including automatic device management;
 - serialization and deserialization of weights (optionally including the optimizer) and configuration;
 - easy to use multi-GPU single-node training (planned, not yet implemented),
-- easy profiling support,
-- automatic logging via various [loggers](logger.md).
+- automatic logging via various [loggers](logger.md),
+- easy profiling support.
 
 The [TransformedDataset](transformed_dataset.md) class allows applying both
 per-example and per-batch transformation functions on a given dataset, and
