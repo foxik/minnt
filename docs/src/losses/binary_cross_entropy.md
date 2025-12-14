@@ -1,0 +1,3 @@
+# BinaryCrossEntropy
+
+::: minnt.losses.BinaryCrossEntropy
