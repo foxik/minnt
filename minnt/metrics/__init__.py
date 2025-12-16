@@ -5,5 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from .binary_cross_entropy import BinaryCrossEntropy
 from .categorical_cross_entropy import CategoricalCrossEntropy
+from .exact_match import ExactMatch
 from .mean import Mean
 from .mean_squared_error import MeanSquaredError

@@ -25,6 +25,7 @@ nav:
   - metric.md
   - metrics/binary_cross_entropy.md
   - metrics/categorical_cross_entropy.md
+  - metrics/exact_match.md
   - metrics/mean.md
   - metrics/mean_squared_error.md
 plugins:
