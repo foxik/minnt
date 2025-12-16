@@ -21,6 +21,8 @@ nav:
   - losses/binary_cross_entropy.md
   - losses/categorical_cross_entropy.md
   - losses/mean_squared_error.md
+- Metrics:
+  - metric.md
 plugins:
 - mkdocstrings:
     default_handler: python

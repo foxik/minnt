@@ -27,3 +27,6 @@ from . import loggers
 # Losses
 from .loss import Loss
 from . import losses
+
+# Metrics
+from .metric import Metric
