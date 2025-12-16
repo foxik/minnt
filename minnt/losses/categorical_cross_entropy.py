@@ -62,7 +62,8 @@ class CategoricalCrossEntropy(Loss):
             - The gold targets might be full "dense" probability distributions. In this case, their
               shape has to be exactly the same as `y`.
           sample_weights: Optional sample weights. If provided, their shape must be broadcastable
-            to `y` with the class dimension removed, and the loss for each sample is weighted accordingly.
+            to a prefix of a shape of `y` with the class dimension removed, and the loss for each sample
+            is weighted accordingly.
 
         Returns:
           A tensor representing the computed loss. A scalar tensor if reduction is `"mean"` or `"sum"`;
@@ -70,12 +71,14 @@ class CategoricalCrossEntropy(Loss):
         """
         y_shape, y_true_shape = y.shape, y_true.shape
         dim = self._dim if len(y_shape) > 1 else 0
+        y_wo_class_dim_shape = y_shape[:dim] + y_shape[dim + 1:]
+
         dense = len(y_true_shape) == len(y_shape)
         if dense:
             assert y_true_shape == y_shape, "In dense format, y_true must have the same shape as y."
             assert self._ignore_index == -100, "When ignore_index is set, y_true cannot be in dense format."
         else:
-            assert y_true_shape == y_shape[:dim] + y_shape[dim + 1:], \
+            assert y_true_shape == y_wo_class_dim_shape, \
                 "In sparse format, y_true must have the same shape as y with the class dimension removed."
             y_true_dtype = y_true.dtype
             assert not y_true_dtype.is_floating_point and not y_true_dtype.is_complex, \
@@ -95,6 +98,11 @@ class CategoricalCrossEntropy(Loss):
             return cross_entropy_loss(y, y_true, ignore_index=self._ignore_index,
                                       label_smoothing=self._label_smoothing, reduction=self._reduction)
         else:
+            while sample_weights.dim() < len(y_wo_class_dim_shape):
+                sample_weights = sample_weights.unsqueeze(dim=-1)
+            if sample_weights.shape != y_wo_class_dim_shape:
+                sample_weights = sample_weights.expand(y_wo_class_dim_shape)
+
             losses = sample_weights * cross_entropy_loss(y, y_true, ignore_index=self._ignore_index,
                                                          label_smoothing=self._label_smoothing, reduction="none")
             if self._reduction == "none":
