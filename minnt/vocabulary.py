@@ -3,7 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable
 
 
 class Vocabulary:
@@ -14,16 +14,16 @@ class Vocabulary:
     - `__len__`: the number of strings in the vocabulary,
     - `__iter__`: the iterator over strings in the vocabulary,
     - `string(index: int) -> str`: the string for a given vocabulary index,
-    - `strings(indices: Sequence[int]) -> list[str]`: the list of strings for the given indices,
+    - `strings(indices: Iterable[int]) -> list[str]`: the list of strings for the given indices,
     - `index(string: str) -> int`: the index of a given string in the vocabulary,
-    - `indices(strings: Sequence[str]) -> list[int]`: the list of indices for given strings.
+    - `indices(strings: Iterable[str]) -> list[int]`: the list of indices for given strings.
     """
     PAD: int = 0
     """The index of the padding token."""
     UNK: int = 1
     """The index of the unknown token, if present."""
 
-    def __init__(self, strings: Sequence[str], add_unk: bool = False) -> None:
+    def __init__(self, strings: Iterable[str], add_unk: bool = False) -> None:
         """Initializes the vocabulary with the given list of strings.
 
         The [Vocabulary.PAD][minnt.Vocabulary.PAD] is always the first token in the vocabulary;
@@ -47,7 +47,7 @@ class Vocabulary:
         """Returns the string for a given vocabulary index."""
         return self._strings[index]
 
-    def strings(self, indices: Sequence[int]) -> list[str]:
+    def strings(self, indices: Iterable[int]) -> list[str]:
         """Returns the list of strings for the given indices."""
         return [self._strings[index] for index in indices]
 
@@ -55,6 +55,6 @@ class Vocabulary:
         """Returns the index of a given string in the vocabulary."""
         return self._string_map.get(string, self.UNK)
 
-    def indices(self, strings: Sequence[str]) -> list[int | None]:
+    def indices(self, strings: Iterable[str]) -> list[int | None]:
         """Returns the list of indices for given strings."""
         return [self._string_map.get(string, self.UNK) for string in strings]
