@@ -1,0 +1,3 @@
+# Mean
+
+::: minnt.metrics.Mean

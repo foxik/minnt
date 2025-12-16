@@ -23,6 +23,7 @@ nav:
   - losses/mean_squared_error.md
 - Metrics:
   - metric.md
+  - metrics/mean.md
 plugins:
 - mkdocstrings:
     default_handler: python
