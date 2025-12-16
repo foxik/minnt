@@ -26,7 +26,7 @@ class MeanSquaredError(Loss):
     def __call__(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> torch.Tensor:
-        """Compute the MSE loss, optionally with sample weights.
+        """Compute the mean squared error loss, optionally with sample weights.
 
         Parameters:
           y: The predicted outputs. Their shape either has to be exactly the same as `y_true` (no broadcasting),
