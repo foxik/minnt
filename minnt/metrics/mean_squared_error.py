@@ -1,0 +1,41 @@
+# This file is part of Minnt <http://github.com/foxik/minnt/>.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import torch
+
+from .mean import Mean
+from .. import losses
+
+
+class MeanSquaredError(Mean):
+    """Mean squared error metric implementation."""
+
+    def __init__(self) -> None:
+        """Create the MeanSquaredError metric object."""
+        super().__init__()
+        self._mse_loss = losses.MeanSquaredError(reduction="none")
+
+    def update(
+        self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
+    ) -> None:
+        """Update the accumulated mean squared error by introducing new values.
+
+        Optional sample weight might be provided; if not, all values are weighted with 1.
+
+        Parameters:
+          y: The predicted outputs. Their shape either has to be exactly the same as `y_true` (no broadcasting),
+            or can contain an additional single dimension of size 1.
+          y_true: The ground-truth targets.
+          sample_weights: Optional sample weights. If provided, their shape must be broadcastable
+            to a prefix of a shape of `y_true`, and the loss for each sample is weighted accordingly.
+        """
+        super().update(self._mse_loss(y, y_true), sample_weights=sample_weights)
+
+    def compute(self) -> torch.Tensor:
+        return self._total / self._count
+
+    def reset(self):
+        self._total.zero_()
+        self._count.zero_()
