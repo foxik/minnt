@@ -44,7 +44,7 @@ class CategoricalCrossEntropy(Mean):
         self._ignore_index = ignore_index
 
     def update(
-        self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
+        self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:
         """Update the accumulated categorical cross-entropy by introducing new values.
 

@@ -18,7 +18,7 @@ class MeanSquaredError(Mean):
         self._mse_loss = losses.MeanSquaredError(reduction="none")
 
     def update(
-        self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
+        self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:
         """Update the accumulated mean squared error by introducing new values.
 

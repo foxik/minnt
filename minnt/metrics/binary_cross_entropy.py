@@ -27,7 +27,7 @@ class BinaryCrossEntropy(Mean):
         self._bce_loss = losses.BinaryCrossEntropy(label_smoothing=label_smoothing, probs=probs, reduction="none")
 
     def update(
-        self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
+        self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:
         """Update the accumulated binary cross-entropy by introducing new values.
 
