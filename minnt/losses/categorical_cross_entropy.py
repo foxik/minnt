@@ -12,7 +12,7 @@ cross_entropy_loss = torch.nn.functional.cross_entropy
 
 
 class CategoricalCrossEntropy(Loss):
-    """Categorical crosse-entropy loss implementation."""
+    """Categorical cross-entropy loss implementation."""
 
     def __init__(
         self,

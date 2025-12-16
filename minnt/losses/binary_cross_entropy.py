@@ -10,7 +10,7 @@ from ..type_aliases import Reduction
 
 
 class BinaryCrossEntropy(Loss):
-    """Binary crosse-entropy loss implementation."""
+    """Binary cross-entropy loss implementation."""
 
     def __init__(self, *, label_smoothing: float = 0.0, probs: bool = False, reduction: Reduction = "mean") -> None:
         """Create the BinaryCrossEntropy loss object with the specified reduction method.
