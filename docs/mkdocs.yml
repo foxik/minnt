@@ -19,6 +19,7 @@ nav:
 - Losses:
   - loss.md
   - losses/binary_cross_entropy.md
+  - losses/categorical_cross_entropy.md
   - losses/mean_squared_error.md
 plugins:
 - mkdocstrings:

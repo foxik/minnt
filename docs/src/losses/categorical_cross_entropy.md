@@ -1,0 +1,3 @@
+# CategoricalCrossEntropy
+
+::: minnt.losses.CategoricalCrossEntropy
