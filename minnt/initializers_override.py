@@ -24,7 +24,7 @@ class KerasParameterInitialization:
         # - the fan_in for each in_feature2 is out_feature * in_feature1
         # - the overall fan_in is computed as a weighted average of the above two as
         #   (2 * out_feature * in_feature1 * in_feature2) / (in_feature1 + in_feature2)
-        out, in1, in2 = self.weight.shape()
+        out, in1, in2 = self.weight.shape
         fan_in = (2 * out * in1 * in2) / (in1 + in2)
         fan_out = in1 * in2
         bound = math.sqrt(6 / (fan_in + fan_out))
