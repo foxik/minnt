@@ -42,7 +42,7 @@ def startup(
     - `MINNT_START_METHOD`: If set to `fork` or `forkserver`, uses the specified method as
       the multiprocessing start method.
     - `MINNT_ALLOW_TF32`: If set to `0` or `1`, overrides the `allow_tf32` parameter.
-    - `MINTT_EXPANDABLE_SEGMENTS`: If set to `0` or `1`, overrides the `expandable_segments` parameter.
+    - `MINNT_EXPANDABLE_SEGMENTS`: If set to `0` or `1`, overrides the `expandable_segments` parameter.
     """
 
     # Set random seed if not None.
