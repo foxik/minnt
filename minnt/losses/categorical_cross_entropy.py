@@ -70,7 +70,7 @@ class CategoricalCrossEntropy(Loss):
             otherwise (if reduction is `"none"`), a tensor of the same shape as `y` without the class dimension.
         """
         y_shape, y_true_shape = y.shape, y_true.shape
-        dim = self._dim if len(y_shape) > 1 else 0
+        dim = self._dim % len(y_shape) if len(y_shape) > 1 else 0
         y_wo_class_dim_shape = y_shape[:dim] + y_shape[dim + 1:]
 
         dense = len(y_true_shape) == len(y_shape)

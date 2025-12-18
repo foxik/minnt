@@ -72,7 +72,7 @@ class CategoricalCrossEntropy(Mean):
             if sample_weights is None:
                 sample_weights = ignore_index_weights
             else:
-                dim = self._dim if len(y_shape) > 1 else 0
+                dim = self._dim % len(y_shape) if len(y_shape) > 1 else 0
                 y_wo_class_dim_shape = y_shape[:dim] + y_shape[dim + 1:]
 
                 while sample_weights.dim() < len(y_wo_class_dim_shape):
