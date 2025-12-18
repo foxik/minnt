@@ -35,9 +35,10 @@ class WandbLogger(BaseLogger):
         self.run = self.wandb.init(project=project, **kwargs)
         self._text_also_as_html = text_also_as_html
 
-    def __del__(self) -> None:
-        # Close the run.
-        self.run.finish()
+    def close(self) -> None:
+        if self.run:
+            self.run.finish()
+            self.run = None
 
     def _maybe_as_html(self, label: str, text: str) -> dict[str, Any]:
         """Return a dict with the HTML version of the text if enabled.

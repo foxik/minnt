@@ -15,6 +15,11 @@ class Logger(ABC):
     """An abstract logger interface for logging metrics and other information."""
 
     @abstractmethod
+    def close(self) -> None:
+        """Close the logger and release its resources."""
+        ...
+
+    @abstractmethod
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
         """Log the given audio with the given label at the given epoch.
 

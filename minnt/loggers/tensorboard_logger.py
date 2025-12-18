@@ -31,10 +31,10 @@ class TensorBoardLogger(BaseLogger):
         self._logdir: str = logdir
         self._writers: dict[str, torch.utils.tensorboard.writer.SummaryWriter] = {}
 
-    def __del__(self) -> None:
-        # Close the writers.
+    def close(self) -> None:
         for writer in self._writers.values():
             writer.close()
+        self._writers.clear()
 
     def get_writer(self, name: str) -> torch.utils.tensorboard.writer.SummaryWriter:
         """Possibly create and return a TensorBoard writer for the given name.

@@ -29,10 +29,10 @@ class FileSystemLogger(BaseLogger):
         self._logdir: str = logdir
         self._log_file: TextIO | None = None
 
-    def __del__(self) -> None:
-        # Close the log file if it was opened.
+    def close(self) -> None:
         if self._log_file:
             self._log_file.close()
+            self._log_file = None
 
     def get_file(self) -> TextIO:
         """Possibly open and return log file object.

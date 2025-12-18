@@ -14,6 +14,10 @@ from ..type_aliases import AnyArray
 class BaseLogger(Logger):
     """An abstract logger providing base functionality for other loggers."""
 
+    def __del__(self) -> None:
+        """Ensure proper resource cleanup on deletion."""
+        self.close()
+
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         import matplotlib.pyplot as plt
         import matplotlib.backends.backend_agg as plt_backend_agg
