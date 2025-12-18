@@ -1,0 +1,3 @@
+# BinaryAccuracy
+
+::: minnt.metrics.BinaryAccuracy

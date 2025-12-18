@@ -1,0 +1,3 @@
+# CategoricalAccuracy
+
+::: minnt.metrics.CategoricalAccuracy

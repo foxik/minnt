@@ -24,7 +24,9 @@ nav:
   - losses/mean_squared_error.md
 - Metrics:
   - metric.md
+  - metrics/binary_accuracy.md
   - metrics/binary_cross_entropy.md
+  - metrics/categorical_accuracy.md
   - metrics/categorical_cross_entropy.md
   - metrics/exact_match.md
   - metrics/mean.md
