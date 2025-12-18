@@ -19,7 +19,7 @@ class BinaryCrossEntropy(Mean):
           label_smoothing: A float in [0.0, 1.0] specifying the label smoothing factor.
             If greater than 0.0, the used ground-truth targets are computed as a mixture
             of the original targets and uniform distribution with weight `1 - label_smoothing`.
-          probs: If False, the predictions are assumed to be logits; if `True`, the
+          probs: If `False`, the predictions are assumed to be logits; if `True`, the
             predictions are assumed to be probabilities. Note that gold targets are
             always expected to be probabilities.
         """
