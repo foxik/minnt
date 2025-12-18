@@ -80,8 +80,8 @@ class Logger(ABC):
     def log_graph(self, graph: torch.nn.Module, data: TensorOrTensors, epoch: int) -> Self:
         """Log the given computation graph by tracing it with the given data.
 
-        Alternatively, loggers may choose to log the graph using TorchScript or
-        other mechanisms.
+        Alternatively, loggers may choose to log the graph using TorchScript, run
+        it on the given data, or use any other mechanism they see fit.
 
         Parameters:
           graph: The computation graph to log, represented as a PyTorch module.
