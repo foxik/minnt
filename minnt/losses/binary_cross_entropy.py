@@ -7,6 +7,7 @@ import torch
 
 from ..loss import Loss
 from ..type_aliases import Reduction
+from ..utils import broadcast_to_prefix
 
 
 class BinaryCrossEntropy(Loss):
@@ -63,9 +64,6 @@ class BinaryCrossEntropy(Loss):
             y_true = y_true * (1.0 - self._label_smoothing) + 0.5 * self._label_smoothing
 
         if sample_weights is not None:
-            while sample_weights.dim() < y_true.dim():
-                sample_weights = sample_weights.unsqueeze(dim=-1)
-            if sample_weights.shape != y_true_shape:
-                sample_weights = sample_weights.expand(y_true_shape)
+            sample_weights = broadcast_to_prefix(sample_weights, y_true_shape)
 
         return self._loss_fn(y, y_true, reduction=self._reduction, weight=sample_weights)

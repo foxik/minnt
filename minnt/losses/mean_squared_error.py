@@ -7,6 +7,7 @@ import torch
 
 from ..loss import Loss
 from ..type_aliases import Reduction
+from ..utils import broadcast_to_prefix
 
 mse_loss = torch.nn.functional.mse_loss
 
@@ -51,9 +52,6 @@ class MeanSquaredError(Loss):
             "up to one singleton dimension in y."
 
         if sample_weights is not None:
-            while sample_weights.dim() < y_true.dim():
-                sample_weights = sample_weights.unsqueeze(dim=-1)
-            if sample_weights.shape != y_true_shape:
-                sample_weights = sample_weights.expand(y_true_shape)
+            sample_weights = broadcast_to_prefix(sample_weights, y_true_shape)
 
         return mse_loss(y, y_true, reduction=self._reduction, weight=sample_weights)

@@ -6,6 +6,7 @@
 import torch
 
 from ..metric import Metric
+from ..utils import broadcast_to_prefix
 
 
 class Mean(Metric):
@@ -32,10 +33,7 @@ class Mean(Metric):
         assert y_true is None, "The y_true parameter must be None for the Mean metric."
 
         if sample_weights is not None:
-            while sample_weights.dim() < y.dim():
-                sample_weights = sample_weights.unsqueeze(dim=-1)
-            if sample_weights.shape != y.shape:
-                sample_weights = sample_weights.expand(y.shape)
+            sample_weights = broadcast_to_prefix(sample_weights, y.shape)
 
         self._total.add_(torch.sum(y * sample_weights) if sample_weights is not None else torch.sum(y))
         self._count.add_(torch.sum(sample_weights) if sample_weights is not None else y.numel())

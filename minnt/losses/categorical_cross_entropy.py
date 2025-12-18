@@ -7,6 +7,7 @@ import torch
 
 from ..loss import Loss
 from ..type_aliases import Reduction
+from ..utils import broadcast_to_prefix
 
 cross_entropy_loss = torch.nn.functional.cross_entropy
 
@@ -98,10 +99,7 @@ class CategoricalCrossEntropy(Loss):
             return cross_entropy_loss(y, y_true, ignore_index=self._ignore_index,
                                       label_smoothing=self._label_smoothing, reduction=self._reduction)
         else:
-            while sample_weights.dim() < len(y_wo_class_dim_shape):
-                sample_weights = sample_weights.unsqueeze(dim=-1)
-            if sample_weights.shape != y_wo_class_dim_shape:
-                sample_weights = sample_weights.expand(y_wo_class_dim_shape)
+            sample_weights = broadcast_to_prefix(sample_weights, y_wo_class_dim_shape)
 
             losses = sample_weights * cross_entropy_loss(y, y_true, ignore_index=self._ignore_index,
                                                          label_smoothing=self._label_smoothing, reduction="none")

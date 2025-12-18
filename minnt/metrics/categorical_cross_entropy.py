@@ -7,6 +7,7 @@ import torch
 
 from .mean import Mean
 from .. import losses
+from ..utils import broadcast_to_prefix
 
 
 class CategoricalCrossEntropy(Mean):
@@ -74,12 +75,7 @@ class CategoricalCrossEntropy(Mean):
             else:
                 dim = self._dim % len(y_shape) if len(y_shape) > 1 else 0
                 y_wo_class_dim_shape = y_shape[:dim] + y_shape[dim + 1:]
-
-                while sample_weights.dim() < len(y_wo_class_dim_shape):
-                    sample_weights = sample_weights.unsqueeze(dim=-1)
-                if sample_weights.shape != y_wo_class_dim_shape:
-                    sample_weights = sample_weights.expand(y_wo_class_dim_shape)
-
+                sample_weights = broadcast_to_prefix(sample_weights, y_wo_class_dim_shape)
                 sample_weights = sample_weights.to(dtype=torch.float32) * ignore_index_weights
 
         super().update(self._cce_loss(y, y_true), sample_weights=sample_weights)
