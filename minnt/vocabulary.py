@@ -9,22 +9,19 @@ from collections.abc import Iterable
 class Vocabulary:
     """ A class for managing mapping between strings and indices.
 
-    The vocabulary is initialized with a list of strings. It provides:
+    The vocabulary is initialized with a list of strings.
 
-    - `__len__`: the number of strings in the vocabulary,
-    - `__iter__`: the iterator over strings in the vocabulary,
-    - `string(index: int) -> str`: the string for a given vocabulary index,
-    - `strings(indices: Iterable[int]) -> list[str]`: the list of strings for the given indices,
-    - `index(string: str) -> int`: the index of a given string in the vocabulary,
-    - `indices(strings: Iterable[str]) -> list[int]`: the list of indices for given strings.
+    It always contains a special padding token [Vocabulary.PAD][minnt.Vocabulary.PAD]
+    at index 0, and optionally an unknown token [Vocabulary.UNK][minnt.Vocabulary.UNK]
+    at index 1 (when [Vocabulary.has_unk][minnt.Vocabulary.has_unk]).
     """
     PAD: int = 0
     """The index of the padding token."""
     UNK: int = 1
-    """The index of the unknown token, if present."""
+    """The index of the unknown token, which might not be present."""
 
     def __init__(self, strings: Iterable[str], add_unk: bool = False) -> None:
-        """Initializes the vocabulary with the given list of strings.
+        """Initialize the vocabulary with the given list of strings.
 
         The [Vocabulary.PAD][minnt.Vocabulary.PAD] is always the first token in the vocabulary;
         [Vocabulary.UNK][minnt.Vocabulary.UNK] is the second token but only when `add_unk=True`.
@@ -32,29 +29,75 @@ class Vocabulary:
         self._strings = ["[PAD]"] + (["[UNK]"] if add_unk else [])
         self._strings.extend(strings)
         self._string_map = {string: index for index, string in enumerate(self._strings)}
-        if not add_unk:
-            self.UNK = None
+        self._has_unk = add_unk
+
+    @property
+    def has_unk(self) -> bool:
+        """A boolean property indicating whether the vocabulary was constructed with an UNK token."""
+        return self._has_unk
 
     def __len__(self) -> int:
-        """Returns the number of strings in the vocabulary."""
+        """The number of strings in the vocabulary.
+
+        Returns:
+          The size of the vocabulary.
+        """
         return len(self._strings)
 
     def __iter__(self) -> Iterable[str]:
-        """Returns an iterator over strings in the vocabulary."""
+        """Return an iterator over strings in the vocabulary.
+
+        Returns:
+          An iterator over strings in the vocabulary.
+        """
         return iter(self._strings)
 
     def string(self, index: int) -> str:
-        """Returns the string for a given vocabulary index."""
+        """Convert vocabulary index to string.
+
+        Parameters:
+          index: The vocabulary index.
+
+        Returns:
+          The string corresponding to the given index.
+        """
         return self._strings[index]
 
     def strings(self, indices: Iterable[int]) -> list[str]:
-        """Returns the list of strings for the given indices."""
+        """Convert a sequence of vocabulary indices to strings.
+
+        Parameters:
+          indices: An iterable of vocabulary indices.
+
+        Returns:
+          A list of strings corresponding to the given indices.
+        """
         return [self._strings[index] for index in indices]
 
     def index(self, string: str) -> int | None:
-        """Returns the index of a given string in the vocabulary."""
-        return self._string_map.get(string, self.UNK)
+        """Convert string to vocabulary index.
+
+        Parameters:
+          string: The string to convert.
+
+        Returns:
+          The index corresponding to the given string. If the string is not found in the vocabulary, then
+
+            - if the vocabulary was constructed with an UNK token, it returns [Vocabulary.UNK][minnt.Vocabulary.UNK];
+            - otherwise, it returns `None`.
+        """
+        return self._string_map.get(string, self.UNK if self._has_unk else None)
 
     def indices(self, strings: Iterable[str]) -> list[int | None]:
-        """Returns the list of indices for given strings."""
-        return [self._string_map.get(string, self.UNK) for string in strings]
+        """Convert a sequence of strings to vocabulary indices.
+
+        Parameters:
+          strings: An iterable of strings to convert.
+
+        Returns:
+          A list of indices corresponding to the given strings. For each string not found in the vocabulary, it returns
+
+            - [Vocabulary.UNK][minnt.Vocabulary.UNK] if the vocabulary was constructed with an UNK token;
+            - otherwise, it returns `None`.
+        """
+        return [self._string_map.get(string, self.UNK if self._has_unk else None) for string in strings]
