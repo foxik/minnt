@@ -32,10 +32,3 @@ class MeanSquaredError(Mean):
             to a prefix of a shape of `y_true`, and the loss for each sample is weighted accordingly.
         """
         super().update(self._mse_loss(y, y_true), sample_weights=sample_weights)
-
-    def compute(self) -> torch.Tensor:
-        return self._total / self._count
-
-    def reset(self):
-        self._total.zero_()
-        self._count.zero_()

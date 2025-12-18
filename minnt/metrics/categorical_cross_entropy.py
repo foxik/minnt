@@ -83,10 +83,3 @@ class CategoricalCrossEntropy(Mean):
                 sample_weights = sample_weights.to(dtype=torch.float32) * ignore_index_weights
 
         super().update(self._cce_loss(y, y_true), sample_weights=sample_weights)
-
-    def compute(self) -> torch.Tensor:
-        return self._total / self._count
-
-    def reset(self):
-        self._total.zero_()
-        self._count.zero_()
