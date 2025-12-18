@@ -35,7 +35,7 @@ class CategoricalCrossEntropy(Mean):
             of the original targets and uniform distribution with weight `1 - label_smoothing`.
           probs: If `False`, the predictions are assumed to be logits; if `True`, the
             predictions are assumed to be probabilities. Note that gold targets are
-            always expected to be probabilities.
+            always expected to be probabilities in the dense format.
         """
         super().__init__()
         self._cce_loss = losses.CategoricalCrossEntropy(

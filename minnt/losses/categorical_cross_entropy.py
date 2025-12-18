@@ -38,7 +38,7 @@ class CategoricalCrossEntropy(Loss):
             of the original targets and uniform distribution with weight `1 - label_smoothing`.
           probs: If `False`, the predictions are assumed to be logits; if `True`, the
             predictions are assumed to be probabilities. Note that gold targets are
-            always expected to be probabilities.
+            always expected to be probabilities in the dense format.
           reduction: The reduction method to apply to the computed loss.
         """
 
