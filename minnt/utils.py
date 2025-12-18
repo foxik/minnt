@@ -24,3 +24,28 @@ def broadcast_to_prefix(tensor: torch.Tensor, shape: torch.Size) -> torch.Tensor
     if tensor.shape != shape:
         tensor = tensor.expand(shape)
     return tensor
+
+
+def maybe_remove_one_singleton_dimension(y: torch.Tensor, y_true: torch.Tensor) -> torch.Tensor:
+    """Possibly remove one singleton dimension from the given tensor `y` to match the shape of `y_true`.
+
+    If `y` has one more dimension than `y_true` and that extra dimension is a dimension of size 1,
+    it will remove that dimension from `y`. Otherwise, `y` is returned unchanged.
+
+    Parameters:
+      y: The predicted outputs.
+      y_true: The ground-truth targets.
+
+    Returns:
+      The tensor `y` with a surplus singleton dimension possibly removed.
+    """
+    y_shape, y_true_shape = y.shape, y_true.shape
+
+    if len(y_shape) == len(y_true_shape) + 1:
+        singleton_dim = 0
+        while singleton_dim < len(y_true_shape) and y_shape[singleton_dim] == y_true_shape[singleton_dim]:
+            singleton_dim += 1
+        if y_shape[singleton_dim] == 1:
+            y = y.squeeze(dim=singleton_dim)
+
+    return y

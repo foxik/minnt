@@ -7,7 +7,7 @@ import torch
 
 from ..loss import Loss
 from ..type_aliases import Reduction
-from ..utils import broadcast_to_prefix
+from ..utils import broadcast_to_prefix, maybe_remove_one_singleton_dimension
 
 mse_loss = torch.nn.functional.mse_loss
 
@@ -40,18 +40,11 @@ class MeanSquaredError(Loss):
           A tensor representing the computed loss. A scalar tensor if reduction is `"mean"` or `"sum"`;
             otherwise (if reduction is `"none"`), a tensor of the same shape as `y_true`.
         """
-        # First match `y` and `y_true` shapes, optionally squeezing one singleton dimension in `y`.
-        y_shape, y_true_shape = y.shape, y_true.shape
-        if len(y_shape) == len(y_true_shape) + 1:
-            singleton_dim = 0
-            while singleton_dim < len(y_true_shape) and y_shape[singleton_dim] == y_true_shape[singleton_dim]:
-                singleton_dim += 1
-            if y_shape[singleton_dim] == 1:
-                y = y.squeeze(dim=singleton_dim)
+        y = maybe_remove_one_singleton_dimension(y, y_true)
         assert y.shape == y_true.shape, f"Shapes of y {y.shape} and y_true {y_true.shape} have to match " \
-            "up to one singleton dimension in y."
+            "up to one singleton dim in y."
 
         if sample_weights is not None:
-            sample_weights = broadcast_to_prefix(sample_weights, y_true_shape)
+            sample_weights = broadcast_to_prefix(sample_weights, y_true.shape)
 
         return mse_loss(y, y_true, reduction=self._reduction, weight=sample_weights)
