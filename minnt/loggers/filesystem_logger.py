@@ -76,7 +76,7 @@ class FileSystemLogger(BaseLogger):
         return f".{epoch}" if epoch else ""
 
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
-        audio = self._process_audio(audio)
+        audio = self.preprocess_audio(audio)
 
         directory, label = self._split_label(label)
         os.makedirs(directory, exist_ok=True)
@@ -124,7 +124,7 @@ class FileSystemLogger(BaseLogger):
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        image = self._process_image(image).numpy()
+        image = self.preprocess_image(image).numpy()
 
         directory, label = self._split_label(label)
         os.makedirs(directory, exist_ok=True)

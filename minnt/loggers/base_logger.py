@@ -31,8 +31,8 @@ class BaseLogger(Logger):
 
         return self.log_image(label, image, epoch)
 
-    def _process_audio(self, audio: AnyArray) -> torch.Tensor:
-        """Produce a CPU-based torch.Tensor with dtype int16 and shape (L, 1/2)."""
+    def preprocess_audio(self, audio: AnyArray) -> torch.Tensor:
+        """Produce a CPU-based [torch.Tensor][] with `dtype=torch.int16` and shape `(L, {1/2})`."""
         audio = torch.as_tensor(audio, device="cpu")
         audio = audio * 32_767 if audio.dtype.is_floating_point else audio
         audio = audio.clamp(-32_768, 32_767).to(torch.int16)
@@ -42,8 +42,8 @@ class BaseLogger(Logger):
             audio = audio.unsqueeze(-1)
         return audio
 
-    def _process_image(self, image: AnyArray) -> torch.Tensor:
-        """Produce a CPU-based torch.Tensor with dtype uint8 and shape (H, W, 1/3/4)."""
+    def preprocess_image(self, image: AnyArray) -> torch.Tensor:
+        """Produce a CPU-based [torch.Tensor][] with `dtype=torch.uint8` and shape `(H, W, {1/3/4})`."""
         image = torch.as_tensor(image, device="cpu")
         image = (image * 255 if image.dtype.is_floating_point else image).clamp(0, 255).to(torch.uint8)
         assert image.ndim == 2 or (image.ndim == 3 and image.shape[2] in (1, 2, 3, 4)), \

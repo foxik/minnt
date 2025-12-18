@@ -50,7 +50,7 @@ class WandbLogger(BaseLogger):
         return {f"{label}_html": self.wandb.Html("<pre>" + html.escape(text) + "</pre>")}
 
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
-        audio = self._process_audio(audio).numpy()
+        audio = self.preprocess_audio(audio).numpy()
         self.run.log({label: self.wandb.Audio(audio, sample_rate=sample_rate)}, step=epoch)
         return self
 
@@ -76,7 +76,7 @@ class WandbLogger(BaseLogger):
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        image = self._process_image(image).numpy()
+        image = self.preprocess_image(image).numpy()
         self.run.log({label: self.wandb.Image(image)}, step=epoch)
         return self
 

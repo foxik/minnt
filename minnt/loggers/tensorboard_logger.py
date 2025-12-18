@@ -57,7 +57,7 @@ class TensorBoardLogger(BaseLogger):
         return self.get_writer(writer), label
 
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
-        audio = self._process_audio(audio)
+        audio = self.preprocess_audio(audio)
         audio = (audio.to(torch.float32) / 32_767).clamp(-1.0, 1.0).movedim(-1, 0)
         if audio.shape[0] == 2:
             audio = audio.mean(dim=0, keepdim=True)
@@ -95,7 +95,7 @@ class TensorBoardLogger(BaseLogger):
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        image = self._process_image(image)
+        image = self.preprocess_image(image)
         writer, label = self._get_writer_from_label(label)
         writer.add_image(label, image, epoch, dataformats="HWC" if image.ndim == 3 else "HW")
         writer.flush()
