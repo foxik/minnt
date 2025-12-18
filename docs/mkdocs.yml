@@ -13,6 +13,7 @@ nav:
 - vocabulary.md
 - Loggers:
   - logger.md
+  - loggers/base_logger.md
   - loggers/filesystem_logger.md
   - loggers/tensorboard_logger.md
   - loggers/wandb_logger.md

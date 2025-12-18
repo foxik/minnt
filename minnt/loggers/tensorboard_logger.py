@@ -10,11 +10,11 @@ from typing import Any, Self
 import torch
 import torch.utils.tensorboard
 
-from ..logger import Logger
+from .base_logger import BaseLogger
 from ..type_aliases import AnyArray, TensorOrTensors
 
 
-class TensorBoardLogger(Logger):
+class TensorBoardLogger(BaseLogger):
     """A TensorBoard logger interface.
 
     In addition to implementing the [Logger][minnt.Logger] interface, it provides

@@ -13,11 +13,11 @@ import zlib
 
 import torch
 
-from ..logger import Logger
+from .base_logger import BaseLogger
 from ..type_aliases import AnyArray, TensorOrTensors
 
 
-class FileSystemLogger(Logger):
+class FileSystemLogger(BaseLogger):
     """A file system logger interface."""
 
     def __init__(self, logdir: str) -> None:

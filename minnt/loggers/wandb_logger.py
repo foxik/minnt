@@ -9,11 +9,11 @@ from typing import Any, Self
 
 import torch
 
-from ..logger import Logger
+from .base_logger import BaseLogger
 from ..type_aliases import AnyArray, TensorOrTensors
 
 
-class WandbLogger(Logger):
+class WandbLogger(BaseLogger):
     """A Wandb logger interface.
 
     The text values are by default also logged as HTML for better visualization.
