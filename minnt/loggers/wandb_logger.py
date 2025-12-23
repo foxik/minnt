@@ -73,6 +73,7 @@ class WandbLogger(BaseLogger):
     def log_graph(self, graph: torch.nn.Module, data: TensorOrTensors, epoch: int) -> Self:
         self.run.watch(graph, log=None, log_graph=True)
         graph(data)  # Run the graph to log it.
+        self.run.unwatch(graph)
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
