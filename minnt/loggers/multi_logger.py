@@ -1,0 +1,66 @@
+# This file is part of Minnt <http://github.com/foxik/minnt/>.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from collections.abc import Iterable
+from typing import Any, Self
+
+import torch
+
+from .base_logger import BaseLogger
+from ..logger import Logger
+from ..type_aliases import AnyArray, TensorOrTensors
+
+
+class MultiLogger(BaseLogger):
+    """A logger that forwards all logging calls to multiple other loggers."""
+
+    def __init__(self, loggers: Iterable[Logger]) -> None:
+        """Initialize the multi-logger.
+
+        Parameters:
+          loggers: An iterable of loggers to forward the logging calls to.
+        """
+        self._loggers: list[Logger] = list(loggers)
+
+    def close(self) -> None:
+        for logger in self._loggers:
+            logger.close()
+
+    def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
+        for logger in self._loggers:
+            logger.log_audio(label, audio, sample_rate, epoch)
+        return self
+
+    def log_config(self, config: dict[str, Any], epoch: int) -> Self:
+        for logger in self._loggers:
+            logger.log_config(config, epoch)
+        return self
+
+    def log_epoch(
+        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
+    ) -> Self:
+        for logger in self._loggers:
+            logger.log_epoch(logs, epoch, epochs, elapsed)
+        return self
+
+    def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
+        for i, logger in enumerate(self._loggers):
+            logger.log_figure(label, figure, epoch, tight_layout, close and i == len(self._loggers) - 1)
+        return self
+
+    def log_graph(self, graph: torch.nn.Module, data: TensorOrTensors, epoch: int) -> Self:
+        for logger in self._loggers:
+            logger.log_graph(graph, data, epoch)
+        return self
+
+    def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
+        for logger in self._loggers:
+            logger.log_image(label, image, epoch)
+        return self
+
+    def log_text(self, label: str, text: str, epoch: int) -> Self:
+        for logger in self._loggers:
+            logger.log_text(label, text, epoch)
+        return self
