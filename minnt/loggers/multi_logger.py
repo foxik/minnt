@@ -22,45 +22,48 @@ class MultiLogger(BaseLogger):
         Parameters:
           loggers: An iterable of loggers to forward the logging calls to.
         """
-        self._loggers: list[Logger] = list(loggers)
+        self.loggers: list[Logger] = list(loggers)
+
+    loggers: list[Logger]
+    """The list of loggers to forward the logging calls to."""
 
     def close(self) -> None:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.close()
 
     def log_audio(self, label: str, audio: AnyArray, sample_rate: int, epoch: int) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_audio(label, audio, sample_rate, epoch)
         return self
 
     def log_config(self, config: dict[str, Any], epoch: int) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_config(config, epoch)
         return self
 
     def log_epoch(
         self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
     ) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_epoch(logs, epoch, epochs, elapsed)
         return self
 
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
-        for i, logger in enumerate(self._loggers):
-            logger.log_figure(label, figure, epoch, tight_layout, close and i == len(self._loggers) - 1)
+        for i, logger in enumerate(self.loggers):
+            logger.log_figure(label, figure, epoch, tight_layout, close and i == len(self.loggers) - 1)
         return self
 
     def log_graph(self, graph: torch.nn.Module, data: TensorOrTensors, epoch: int) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_graph(graph, data, epoch)
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_image(label, image, epoch)
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:
-        for logger in self._loggers:
+        for logger in self.loggers:
             logger.log_text(label, text, epoch)
         return self
