@@ -13,6 +13,9 @@ nav:
 - vocabulary.md
 - Callbacks:
   - callback.md
+  - callbacks/keep_best_weights.md
+  - callbacks/save_best_weights.md
+  - callbacks/save_weights.md
 - Loggers:
   - logger.md
   - loggers/base_logger.md

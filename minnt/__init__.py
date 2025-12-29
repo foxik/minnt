@@ -22,6 +22,7 @@ from .version import __version__
 
 # Callbacks
 from .callback import Callback, STOP_TRAINING
+from . import callbacks
 
 # Loggers
 from .logger import Logger
