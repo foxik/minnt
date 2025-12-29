@@ -11,6 +11,8 @@ nav:
 - type_aliases.md
 - utilities.md
 - vocabulary.md
+- Callbacks:
+  - callback.md
 - Loggers:
   - logger.md
   - loggers/base_logger.md

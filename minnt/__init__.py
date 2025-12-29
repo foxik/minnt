@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # TrainableModule
-from .trainable_module import Callback, TrainableModule
+from .trainable_module import TrainableModule
 
 # TransformedDataset
 from .transformed_dataset import TransformedDataset
@@ -19,6 +19,9 @@ from .vocabulary import Vocabulary
 from .initializers_override import global_keras_initializers
 from .startup import startup
 from .version import __version__
+
+# Callbacks
+from .callback import Callback, STOP_TRAINING
 
 # Loggers
 from .logger import Logger

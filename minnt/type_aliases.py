@@ -28,7 +28,8 @@ class HasCompute(Protocol):
 Logs: TypeAlias = dict[str, float | torch.Tensor | np.ndarray | HasCompute]
 """A dictionary of logs, with keys being the log names and values being the log values.
 
-When the logs are returned by the TrainableModule, they are always just float values.
+When the logs are returned by a [minnt.TrainableModule][] or passed to a [minnt.Callback][],
+they are always evaluated to just float values.
 """
 
 Reduction: TypeAlias = Literal["mean", "sum", "none"]
