@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import os
+
 import torch
 
 
@@ -49,3 +51,21 @@ def maybe_remove_one_singleton_dimension(y: torch.Tensor, y_true: torch.Tensor) 
             y = y.squeeze(dim=singleton_dim)
 
     return y
+
+
+def fill_and_standardize_path(path: str, **kwargs) -> str:
+    """Fill placeholders in the path and standardize path separators.
+
+    The template placeholders `{key}` in the path are replaced with the corresponding values
+    from `kwargs` using `str.format`, and the both slashes are replaced with the current OS path separators.
+
+    Parameters:
+      path: The path template with placeholders.
+      **kwargs: The keyword arguments to fill the placeholders in the path.
+
+    Returns:
+      The standardized path with filled placeholders and OS-specific separators.
+    """
+    filled_path = path.format(**kwargs)
+    standardized_path = filled_path.replace("\\", os.path.sep).replace("/", os.path.sep)
+    return standardized_path
