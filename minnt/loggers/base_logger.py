@@ -31,6 +31,16 @@ class BaseLogger(Logger):
 
         return self.log_image(label, image, epoch)
 
+    @staticmethod
+    def format_epoch_logs(
+        logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
+    ) -> str:
+        return " ".join(
+            [f"Epoch {epoch}" + (f"/{epochs}" if epochs is not None else "")]
+            + ([f"{elapsed:.1f}s"] if elapsed is not None else [])
+            + [f"{k}={v:#.{0 < abs(v) < 2e-4 and '2e' or '4f'}}" for k, v in logs.items()]
+        )
+
     def preprocess_audio(self, audio: AnyArray) -> torch.Tensor:
         """Produce a CPU-based [torch.Tensor][] with `dtype=torch.int16` and shape `(L, {1/2})`."""
         audio = torch.as_tensor(audio, device="cpu")

@@ -103,10 +103,7 @@ class FileSystemLogger(BaseLogger):
     def log_epoch(
         self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
     ) -> Self:
-        print(f"Epoch {epoch}" + (f"/{epochs}" if epochs is not None else ""),
-              *[f"{elapsed:.1f}s"] if elapsed is not None else [],
-              *[f"{k}={v:#.{0 < abs(v) < 2e-4 and '2e' or '4f'}}" for k, v in logs.items()],
-              file=self.get_file(), flush=True)
+        print(self.format_epoch_logs(logs, epoch, epochs, elapsed), file=self.get_file(), flush=True)
         return self
 
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
