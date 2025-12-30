@@ -12,7 +12,9 @@ from .. import losses
 class BinaryCrossEntropy(Mean):
     """Binary cross-entropy metric implementation."""
 
-    def __init__(self, *, label_smoothing: float = 0.0, probs: bool = False) -> None:
+    def __init__(
+        self, *, label_smoothing: float = 0.0, probs: bool = False, device: torch.device | None = None,
+    ) -> None:
         """Create the BinaryCrossEntropy metric object.
 
         Parameters:
@@ -23,7 +25,7 @@ class BinaryCrossEntropy(Mean):
             predictions are assumed to be probabilities. Note that gold targets are
             always expected to be probabilities.
         """
-        super().__init__()
+        super().__init__(device)
         self._bce_loss = losses.BinaryCrossEntropy(label_smoothing=label_smoothing, probs=probs, reduction="none")
 
     def update(

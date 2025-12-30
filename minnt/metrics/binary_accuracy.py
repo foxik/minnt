@@ -17,7 +17,7 @@ class BinaryAccuracy(Mean):
     class is considered to be the one with larger probability.
     """
 
-    def __init__(self, *, probs: bool = False) -> None:
+    def __init__(self, *, probs: bool = False, device: torch.device | None = None) -> None:
         """Create the BinaryAccuracy metric object.
 
         Parameters:
@@ -25,7 +25,7 @@ class BinaryAccuracy(Mean):
             predictions are assumed to be probabilities. Note that gold targets are
             always expected to be probabilities.
         """
-        super().__init__()
+        super().__init__(device)
         self._probs = probs
 
     def update(

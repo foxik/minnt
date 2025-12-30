@@ -12,11 +12,11 @@ from ..utils import broadcast_to_prefix
 class Mean(Metric):
     """A class tracking the (optionally weighted) mean of given values."""
 
-    def __init__(self) -> None:
+    def __init__(self, device: torch.device | None = None) -> None:
         """Create the Mean metric object."""
         super().__init__()
-        self.register_buffer("_total", torch.tensor(0.0, dtype=torch.float32), persistent=False)
-        self.register_buffer("_count", torch.tensor(0.0, dtype=torch.float32), persistent=False)
+        self.register_buffer("_total", torch.tensor(0.0, dtype=torch.float32, device=device), persistent=False)
+        self.register_buffer("_count", torch.tensor(0.0, dtype=torch.float32, device=device), persistent=False)
 
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,

@@ -18,7 +18,9 @@ class CategoricalAccuracy(Mean):
     to be the one with the highest probability.
     """
 
-    def __init__(self, dim: int = 1, *, ignore_index: int = -100, probs: bool = False) -> None:
+    def __init__(
+        self, dim: int = 1, *, ignore_index: int = -100, probs: bool = False, device: torch.device | None = None,
+    ) -> None:
         """Create the CategoricalAccuracy metric object.
 
         Parameters:
@@ -31,7 +33,7 @@ class CategoricalAccuracy(Mean):
             describing whether the predictions are logits or probabilities. However, to predict the
             most probable class, it does not matter whether logits or probabilities are used.
         """
-        super().__init__()
+        super().__init__(device)
         self._dim = dim
         self._ignore_index = ignore_index
 

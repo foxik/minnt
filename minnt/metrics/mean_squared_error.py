@@ -12,9 +12,9 @@ from .. import losses
 class MeanSquaredError(Mean):
     """Mean squared error metric implementation."""
 
-    def __init__(self) -> None:
+    def __init__(self, device: torch.device | None = None) -> None:
         """Create the MeanSquaredError metric object."""
-        super().__init__()
+        super().__init__(device)
         self._mse_loss = losses.MeanSquaredError(reduction="none")
 
     def update(

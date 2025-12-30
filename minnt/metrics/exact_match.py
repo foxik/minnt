@@ -19,7 +19,7 @@ class ExactMatch(Mean):
     compared directly.
     """
 
-    def __init__(self, element_dims: int | tuple[int] = ()) -> None:
+    def __init__(self, element_dims: int | tuple[int] = (), device: torch.device | None = None) -> None:
         """Create the ExactMatch metric object.
 
         Parameters:
@@ -27,7 +27,7 @@ class ExactMatch(Mean):
             can be used to specify which dimensions of the tensors form
             an element for comparison.
         """
-        super().__init__()
+        super().__init__(device)
         if isinstance(element_dims, int):
             self._element_dims = (element_dims,)
         elif isinstance(element_dims, (tuple, list)):

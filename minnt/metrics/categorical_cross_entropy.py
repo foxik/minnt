@@ -20,6 +20,7 @@ class CategoricalCrossEntropy(Mean):
         ignore_index: int = -100,
         label_smoothing: float = 0.0,
         probs: bool = False,
+        device: torch.device | None = None,
     ) -> None:
         """Create the CategoricalCrossEntropy metric object.
 
@@ -37,7 +38,7 @@ class CategoricalCrossEntropy(Mean):
             predictions are assumed to be probabilities. Note that gold targets are
             always expected to be probabilities in the dense format.
         """
-        super().__init__()
+        super().__init__(device)
         self._cce_loss = losses.CategoricalCrossEntropy(
             dim=dim, ignore_index=ignore_index, label_smoothing=label_smoothing, probs=probs, reduction="none",
         )
