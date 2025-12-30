@@ -35,6 +35,7 @@ class ExactMatch(Mean):
         else:
             raise TypeError("The element_dims argument must be an int or a tuple of ints.")
 
+    @torch.no_grad
     def update(
         self,
         y: torch.Tensor | Iterable[Any],

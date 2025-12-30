@@ -18,6 +18,7 @@ class Mean(Metric):
         self.register_buffer("_total", torch.tensor(0.0, dtype=torch.float32, device=device), persistent=False)
         self.register_buffer("_count", torch.tensor(0.0, dtype=torch.float32, device=device), persistent=False)
 
+    @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
     ) -> None:

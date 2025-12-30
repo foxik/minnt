@@ -28,6 +28,7 @@ class BinaryAccuracy(Mean):
         super().__init__(device)
         self._probs = probs
 
+    @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:

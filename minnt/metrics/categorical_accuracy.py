@@ -37,6 +37,7 @@ class CategoricalAccuracy(Mean):
         self._dim = dim
         self._ignore_index = ignore_index
 
+    @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:

@@ -28,6 +28,7 @@ class BinaryCrossEntropy(Mean):
         super().__init__(device)
         self._bce_loss = losses.BinaryCrossEntropy(label_smoothing=label_smoothing, probs=probs, reduction="none")
 
+    @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:

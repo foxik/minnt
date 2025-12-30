@@ -17,6 +17,7 @@ class MeanSquaredError(Mean):
         super().__init__(device)
         self._mse_loss = losses.MeanSquaredError(reduction="none")
 
+    @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
     ) -> None:
