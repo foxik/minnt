@@ -68,6 +68,12 @@ class CategoricalCrossEntropy(Mean):
 
         dense = len(y_true_shape) == len(y_shape)
         if not dense:
+            y_true_dtype = y_true.dtype
+            assert not y_true_dtype.is_floating_point and not y_true_dtype.is_complex, \
+                "In sparse format, y_true must contain class indices."
+            if y_true_dtype != torch.int64 and y_true_dtype != torch.uint8:
+                y_true = y_true.long()
+
             # For sparse targets, we need to mask out the ignored classes manually.
             ignore_index_weights = (y_true != self._ignore_index).to(dtype=torch.float32)
             if sample_weights is None:

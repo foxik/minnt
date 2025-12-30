@@ -84,8 +84,8 @@ class CategoricalCrossEntropy(Loss):
             y_true_dtype = y_true.dtype
             assert not y_true_dtype.is_floating_point and not y_true_dtype.is_complex, \
                 "In sparse format, y_true must contain class indices."
-            if y_true_dtype != torch.int64:
-                y_true = y_true.int64()
+            if y_true_dtype != torch.int64 and y_true_dtype != torch.uint8:
+                y_true = y_true.long()
 
         if self._probs:
             y = y.clamp(min=1e-7, max=1.0 - 1e-7).log()
