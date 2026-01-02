@@ -20,8 +20,6 @@ class SaveBestWeights(Callback):
         metric: str,
         mode: Literal["max", "min"] = "max",
         optimizer_path: str | None = None,
-        config_path: str | None = None,
-        config: dict = {},
     ) -> None:
         """Create the SaveBestWeights callback.
 
@@ -32,12 +30,7 @@ class SaveBestWeights(Callback):
           mode: One of `"max"` or `"min"`, indicating whether the monitored metric should be maximized
             or minimized.
           optimizer_path: An optional path passed to [minnt.TrainableModule.save_weights][] to
-            save also the optimizer state.
-          config_path: An optional path where to save the configuration. If given, the
-            [minnt.TrainableModule.save_config][] method is used to save the configuration
-            from the `config` parameter after each epoch.
-          config: A directory with configuration parameters passed to the
-            [minnt.TrainableModule.save_config][].
+            save also the optimizer state; it is relative to `path`.
         """
         assert mode in ("max", "min"), "mode must be one of 'max' or 'min'"
 
@@ -45,8 +38,6 @@ class SaveBestWeights(Callback):
         self._metric = metric
         self._mode = mode
         self._optimizer_path = optimizer_path
-        self._config_path = config_path
-        self._config = config
 
         self.best_metric_value = None
 
@@ -60,5 +51,3 @@ class SaveBestWeights(Callback):
             self.best_value = logs[self._metric]
 
             module.save_weights(self._path, optimizer_path=self._optimizer_path)
-            if self._config_path is not None:
-                module.save_config(self._config_path, self._config)
