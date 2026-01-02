@@ -382,6 +382,7 @@ class TrainableModule(torch.nn.Module):
                 logs = self.train_step(xs, y)
                 log_graph = log_graph and self.logger.log_graph(self.module or self, xs, self.epoch - 1) and False
             if dev is not None:
+                compute_logs(logs)
                 logs |= {f"dev:{k}": v for k, v in self.eval().evaluate(dev, log_as=None).items()}
             for callback in callbacks:
                 stop_training = callback(self.eval(), self.epoch, compute_logs(logs)) is STOP_TRAINING or stop_training
