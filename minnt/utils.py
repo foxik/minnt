@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import os
+import re
 from typing import Any
 
 import torch
@@ -71,3 +72,15 @@ def fill_and_standardize_path(path: str, **kwargs: Any) -> str:
     filled_path = path.format(**kwargs)
     standardized_path = filled_path.replace("\\", os.path.sep).replace("/", os.path.sep)
     return standardized_path
+
+
+def sanitize_path(path: str) -> str:
+    """Sanitize the given path by replacing path-unfriendly characters with underscores.
+
+    Parameters:
+      path: The input path to sanitize.
+
+    Returns:
+      The sanitized path.
+    """
+    return re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", path)

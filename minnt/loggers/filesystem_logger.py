@@ -14,6 +14,7 @@ import torch
 
 from .base_logger import BaseLogger
 from ..type_aliases import AnyArray, TensorOrTensors
+from ..utils import sanitize_path
 
 
 class FileSystemLogger(BaseLogger):
@@ -45,16 +46,6 @@ class FileSystemLogger(BaseLogger):
 
         return self._log_file
 
-    def _sanitize_path(self, input_string: str) -> str:
-        """Sanitize the given string to be safe for file paths.
-
-        Parameters:
-          input_string: The input string to sanitize.
-        Returns:
-          The sanitized string.
-        """
-        return re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", input_string)
-
     def _split_label(self, label: str) -> tuple[str, str]:
         """Split the given label into directory and base label, and sanitize them.
 
@@ -63,7 +54,7 @@ class FileSystemLogger(BaseLogger):
           label: The base label.
         """
         directory, label = label.split(":", maxsplit=1) if ":" in label else ("train", label)
-        directory, label = map(self._sanitize_path, (directory, label))
+        directory, label = map(sanitize_path, (directory, label))
         return os.path.join(self._logdir, directory), label
 
     def _maybe_epoch(self, epoch: int) -> str:
