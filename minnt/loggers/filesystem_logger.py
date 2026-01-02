@@ -3,7 +3,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-import json
 import os
 import re
 import struct
@@ -90,14 +89,8 @@ class FileSystemLogger(BaseLogger):
 
     def log_config(self, config: dict[str, Any], epoch: int) -> Self:
         config = dict(sorted(config.items()))
-
         print("Config", f"epoch={epoch}", *[f"{k}={v}" for k, v in config.items()],
               file=self.get_file(), flush=True)
-
-        os.makedirs(self._logdir, exist_ok=True)
-        with open(os.path.join(self._logdir, f"config{self._maybe_epoch(epoch)}.json"), "w", encoding="utf-8") as file:
-            json.dump(config, file, ensure_ascii=False, indent=2)
-
         return self
 
     def log_epoch(
