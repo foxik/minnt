@@ -57,7 +57,8 @@ def fill_and_standardize_path(path: str, **kwargs) -> str:
     """Fill placeholders in the path and standardize path separators.
 
     The template placeholders `{key}` in the path are replaced with the corresponding values
-    from `kwargs` using `str.format`, and the both slashes are replaced with the current OS path separators.
+    from `kwargs` using `str.format`, and the both slashes and backslashes are replaced
+    with the current OS path separator.
 
     Parameters:
       path: The path template with placeholders.
