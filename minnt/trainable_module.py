@@ -726,8 +726,7 @@ class TrainableModule(torch.nn.Module):
                 self.scheduler.load_state_dict(optimizer_state["scheduler"])
             else:
                 assert "scheduler" not in optimizer_state, "The scheduler state is present, but there is no scheduler."
-        self.to(self.device)
-        return self
+        return self.to(self.device)
 
     @static_or_instance_method
     def save_options(self, _path_: str, /, **kwargs: Any) -> None:
