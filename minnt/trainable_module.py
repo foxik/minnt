@@ -730,7 +730,7 @@ class TrainableModule(torch.nn.Module):
         return self
 
     @static_or_instance_method
-    def save_options(self, _path_: str, /, **kwargs: dict) -> None:
+    def save_options(self, _path_: str, /, **kwargs: Any) -> None:
         """Save a JSON-serializable options or [argparse.Namespace][]s to the given path.
 
         The method can be called both as a static method and as an instance method.

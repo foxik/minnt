@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import os
+from typing import Any
 
 import torch
 
@@ -53,7 +54,7 @@ def maybe_remove_one_singleton_dimension(y: torch.Tensor, y_true: torch.Tensor) 
     return y
 
 
-def fill_and_standardize_path(path: str, **kwargs) -> str:
+def fill_and_standardize_path(path: str, **kwargs: Any) -> str:
     """Fill placeholders in the path and standardize path separators.
 
     The template placeholders `{key}` in the path are replaced with the corresponding values

@@ -18,7 +18,7 @@ class WandbLogger(BaseLogger):
 
     The text values are by default also logged as HTML for better visualization.
     """
-    def __init__(self, project: str, *, text_also_as_html: bool = True, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, project: str, *, text_also_as_html: bool = True, **kwargs: Any) -> None:
         """Create the WandbLogger with the given project name.
 
         Additional keyword arguments are passed to `wandb.init()`.

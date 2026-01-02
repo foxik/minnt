@@ -83,7 +83,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         return batch
 
     def dataloader(
-        self, batch_size=1, *, shuffle=False, seed=None, num_workers=0, **kwargs
+        self, batch_size=1, *, shuffle=False, seed=None, num_workers=0, **kwargs: Any,
     ) -> torch.utils.data.DataLoader:
         """Create a DataLoader for this dataset.
 
