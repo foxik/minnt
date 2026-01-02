@@ -597,7 +597,7 @@ class TrainableModule(torch.nn.Module):
         unpackable by this method.
 
         Parameters:
-          y_pred: The batch predictions, either a single tensor or a tensor structure.
+          y: The batch predictions, either a single tensor or a tensor structure.
           *xs: The inputs to the model; unpacked, if the input is a list or a tuple.
 
         Returns:
