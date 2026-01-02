@@ -1,7 +1,7 @@
 .PHONY: all
 all: site
 
-prerequisities := Makefile mkdocs.yml $(wildcard src/* src/*/* template/partials/*)
+prerequisities := Makefile mkdocs.yml $(wildcard src/* src/*/* template/partials/* ../minnt/* ../minnt/*/*)
 site: $(prerequisities)
 	venv/bin/mkdocs build
 	@rm -rf site/assets/images site/assets/javascripts/lunr site/assets/javascripts/workers site/assets/*/*.map site/partials
