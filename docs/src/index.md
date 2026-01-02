@@ -18,17 +18,17 @@ See the [Examples](examples.md). Install using:
 The central class in Minnt is the [TrainableModule](trainable_module.md) providing:
 
 - high-level training, evaluation, and prediction API, including automatic device management;
-- serialization and deserialization of weights (optionally including the optimizer) and configuration;
+- serialization and deserialization of weights (optionally including the optimizer) and module options;
 - easy to use multi-GPU single-node training (planned, not yet implemented),
 - automatic logging via various [loggers](logger.md),
-- easy profiling support.
+- easy profiling support (planned, not yet implemented).
 
 The [TransformedDataset](transformed_dataset.md) class allows applying both
 per-example and per-batch transformation functions on a given dataset, and
 simplifies the creation of a corresponding dataloader (in a multi-GPU setting if
 required).
 
-Furthermore, the package contains a collection of [losses](loss.md) and metrics; however,
+Furthermore, the package contains a collection of [losses](loss.md) and [metrics](metric.md); however,
 losses from PyTorch and metrics from [torchmetrics](https://lightning.ai/docs/torchmetrics/stable/)
 can also be used directly.
 
