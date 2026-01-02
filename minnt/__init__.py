@@ -16,6 +16,7 @@ from .type_aliases import AnyArray, HasCompute, Logs, Reduction, Tensor, TensorO
 from .vocabulary import Vocabulary
 
 # Utils
+from .format_logdir import format_logdir
 from .initializers_override import global_keras_initializers
 from .startup import startup
 from .version import __version__
