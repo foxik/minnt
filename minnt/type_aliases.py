@@ -40,9 +40,9 @@ Tensor: TypeAlias = torch.Tensor | torch.nn.utils.rnn.PackedSequence
 """A type alias for a single tensor or a packed sequence of tensors."""
 
 
-TensorOrTensors: TypeAlias = Tensor | tuple[Tensor, ...] | list[Tensor] | Any
-"""A type alias for a single tensor/packed sequence of a sequence of them.
+TensorOrTensors: TypeAlias = Tensor | tuple[Tensor, ...] | list[Tensor] | dict[str, Tensor] | Any
+"""A type alias for a single tensor or a tensor structure.
 
-While a tensor or a tuple of them is the most common, any type is allowed
-here to accomodate dictionaries or custom data structures.
+While a tensor or a sequence of them is the most common, any type is allowed
+here to accomodate nested or completely custom data structures.
 """
