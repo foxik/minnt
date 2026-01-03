@@ -39,6 +39,10 @@ nav:
   - metrics/mean_squared_error.md
 - Optimizers:
   - optimizers/adafactor.md
+- Schedulers:
+  - schedulers/cosine_decay.md
+  - schedulers/generic_decay.md
+  - schedulers/linear_decay.md
 plugins:
 - mkdocstrings:
     default_handler: python

@@ -1,0 +1,3 @@
+# GenericDecay
+
+::: minnt.schedulers.GenericDecay

@@ -1,0 +1,3 @@
+# CosineDecay
+
+::: minnt.schedulers.CosineDecay

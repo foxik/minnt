@@ -1,0 +1,3 @@
+# LinearDecay
+
+::: minnt.schedulers.LinearDecay
