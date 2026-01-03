@@ -37,6 +37,8 @@ nav:
   - metrics/exact_match.md
   - metrics/mean.md
   - metrics/mean_squared_error.md
+- Optimizers:
+  - optimizers/adafactor.md
 plugins:
 - mkdocstrings:
     default_handler: python
