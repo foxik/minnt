@@ -29,7 +29,7 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
         warmup: int | float = 0,
         last_epoch: int = -1,
     ) -> None:
-        """Creates a new GenericDecay scheduler instance.
+        r"""Creates a new GenericDecay scheduler instance.
 
         Parameters:
           optimizer: The optimizer for which to schedule the learning rate.
@@ -39,13 +39,13 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
 
             - `"cosine"`: cosine decay, computed as
 
-            $$\\operatorname{decay\\_factor}(t) = \\mathit{final\\_decay} + (1 - \\mathit{final\\_decay}) \\cdot
-              \\bigg(\\frac{1 + \\cos(\\pi \\cdot t / \\mathit{decay\\_steps})}{2}\\bigg);$$
+            $$\operatorname{decay\_factor}(t) = \mathit{final\_decay} + (1 - \mathit{final\_decay}) \cdot
+              \bigg(\frac{1 + \cos(\pi \cdot t / \mathit{decay\_steps})}{2}\bigg);$$
 
             - `"linear"`: linear decay, computed as
 
-            $$\\operatorname{decay\\_factor}(t) = \\mathit{final\\_decay} + (1 - \\mathit{final\\_decay}) \\cdot
-              \\bigg(1 - \\frac{t}{\\mathit{decay\\_steps}}\\bigg);$$
+            $$\operatorname{decay\_factor}(t) = \mathit{final\_decay} + (1 - \mathit{final\_decay}) \cdot
+              \bigg(1 - \frac{t}{\mathit{decay\_steps}}\bigg);$$
 
             - `"none"`: no decay, i.e., keeping the initial learning rate.
           final_decay: The final learning rate as a fraction of the initial
