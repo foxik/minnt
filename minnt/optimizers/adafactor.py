@@ -16,8 +16,8 @@ of the PyTorch implementation describes these differences). However, in our
 experiments, the PyTorch implementation has been consistently outperformed by the
 original (i.e., this) implementation.
 """
+from collections.abc import Iterable  # noqa: F401
 import math
-from typing import Iterable  # noqa: F401
 
 import torch
 
