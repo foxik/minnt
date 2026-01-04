@@ -80,6 +80,7 @@ theme:
   custom_dir: template
   features:
   - navigation.top
+  - toc.follow
   palette:
   - media: "(prefers-color-scheme)"
     toggle:
