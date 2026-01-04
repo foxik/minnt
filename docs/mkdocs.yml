@@ -73,12 +73,21 @@ markdown_extensions:
     generic: true
     inline_syntax: [dollar]
     block_syntax: [dollar]
+  pymdownx.highlight:
+  pymdownx.inlinehilite:
+  pymdownx.snippets:
+    base_path: [., ..]
+    check_paths: true
+  pymdownx.superfences:
+  pymdownx.tabbed:
+    alternate_style: true
 theme:
   name: material
   logo: images/leaf-green.svg
   favicon: images/leaf-green.svg
   custom_dir: template
   features:
+  - content.code.copy
   - navigation.top
   - toc.follow
   palette:
