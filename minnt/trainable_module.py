@@ -127,13 +127,9 @@ def compute_logs(logs: Logs) -> dict[str, float]:
 
 
 def get_auto_device() -> torch.device:
-    """Return the first available accelerator or CPU if none is available."""
-    if torch.cuda.is_available():
-        return torch.device("cuda")
-    if torch.backends.mps.is_available():
-        return torch.device("mps")
-    if torch.xpu.is_available():
-        return torch.device("xpu")
+    """Return an available accelerator or CPU if none is available."""
+    if torch.accelerator.is_available():
+        return torch.accelerator.current_accelerator()
     return torch.device("cpu")
 
 
