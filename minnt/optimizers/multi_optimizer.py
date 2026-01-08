@@ -15,9 +15,7 @@ class MultiOptimizer(torch.optim.Optimizer):
     Warning:
         The implementation is quite hacky (MultiOptimizer does not call the parent constructor
         of the [torch.optim.Optimizer][] and provides only a subset of the functionality),
-        but it seems to work well for the intended use case, which is to allow training sparse
-        embeddings with [torch.optim.SparseAdam][] while training the rest of the model with
-        a different optimizer (e.g., [torch.optim.Adam][]).
+        but it seems to work well enough for [minnt.optimizers.LazyAdam][] to work.
 
     Info:
         The current limitations of the MultiOptimizer are:

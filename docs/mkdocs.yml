@@ -39,6 +39,7 @@ nav:
   - metrics/mean_squared_error.md
 - Optimizers:
   - optimizers/adafactor.md
+  - optimizers/lazy_adam.md
   - optimizers/multi_optimizer.md
 - Schedulers:
   - schedulers/cosine_decay.md
