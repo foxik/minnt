@@ -28,6 +28,7 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
         final_decay: float = 0.0,
         warmup: int | float = 0,
         last_epoch: int = -1,
+        warn_about_exceeding_steps: bool = True,
     ) -> None:
         r"""Creates a new GenericDecay scheduler instance.
 
@@ -54,6 +55,8 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
             it is treated as a fraction of `total_steps`; otherwise, it is treated as
             an absolute number of steps. Default is 0 (no warmup).
           last_epoch: The index of the last epoch when resuming training. Default is -1.
+          warn_about_exceeding_steps: Whether to raise a [RuntimeWarning][] if the number of steps
+            exceeds the `total_steps`.
         """
         assert decay in ("cosine", "linear", "none"), f"Unknown decay strategy: {decay}"
         self._decay = decay
@@ -63,6 +66,7 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
         assert self._warmup_steps <= total_steps, "Warmup steps must be at most the total steps"
 
         self._final_decay = final_decay
+        self._warn_about_exceeding_steps = warn_about_exceeding_steps
         super().__init__(optimizer, self.compute_decay_factor, last_epoch)
 
     def compute_decay_factor(self, step: int) -> float:
@@ -70,9 +74,10 @@ class GenericDecay(torch.optim.lr_scheduler.LambdaLR):
             return step / self._warmup_steps
 
         if step > self._warmup_steps + self._decay_steps:
-            warnings.warn(
-                f"Step {step} exceeds total steps ({self._warmup_steps + self._decay_steps}). "
-                "The final learning rate will be kept.", RuntimeWarning)
+            if self._warn_about_exceeding_steps:
+                warnings.warn(
+                    f"Step {step} exceeds total steps ({self._warmup_steps + self._decay_steps}). "
+                    "The final learning rate will be kept.", RuntimeWarning)
             step = self._warmup_steps + self._decay_steps
 
         if self._decay == "none" or self._decay_steps == 0:

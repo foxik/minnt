@@ -22,10 +22,18 @@ class LinearDecay(GenericDecay):
         final_decay: float = 0.0,
         warmup: int | float = 0,
         last_epoch: int = -1,
+        warn_about_exceeding_steps: bool = True,
     ) -> None:
         """Creates a new LinearDecay scheduler instance.
 
         Please refer to the documentation of [minnt.schedulers.GenericDecay][] for details.
         """
         super().__init__(
-            optimizer, total_steps, "linear", final_decay=final_decay, warmup=warmup, last_epoch=last_epoch)
+            optimizer,
+            total_steps,
+            decay="linear",
+            final_decay=final_decay,
+            warmup=warmup,
+            last_epoch=last_epoch,
+            warn_about_exceeding_steps=warn_about_exceeding_steps,
+        )
