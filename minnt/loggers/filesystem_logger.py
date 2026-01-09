@@ -97,7 +97,8 @@ class FileSystemLogger(BaseLogger):
         with open(os.path.join(self._logdir, f"graph{self._maybe_epoch(epoch)}.txt"), "w", encoding="utf-8") as file:
             if isinstance(graph, torch.nn.Sequential):
                 print("# Sequential Module", graph, file=file, sep="\n", end="\n\n")
-            traced = torch.jit.trace(graph, data, strict=False)
+            with self.graph_in_eval_mode(graph), torch.no_grad():
+                traced = torch.jit.trace(graph, data, strict=False)
             print("# Traced Code", traced.code, file=file, sep="\n", end="\n\n")
             print("# Traced Graph", traced.graph, file=file, sep="\n")
             print("# Traced Inlined Graph", traced.inlined_graph, file=file, sep="\n")

@@ -3,6 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import contextlib
 from typing import Any, Self
 
 import torch
@@ -40,6 +41,19 @@ class BaseLogger(Logger):
             + ([f"{elapsed:.1f}s"] if elapsed is not None else [])
             + [f"{k}={v:#.{0 < abs(v) < 2e-4 and '2e' or '4f'}}" for k, v in logs.items()]
         )
+
+    @contextlib.contextmanager
+    def graph_in_eval_mode(self, graph: torch.nn.Module):
+        """Context manager to temporarily set the training mode of ``graph`` to eval."""
+        if not isinstance(graph, torch.jit.ScriptFunction):
+            old_training = graph.training
+            graph.train(False)
+            try:
+                yield
+            finally:
+                graph.train(old_training)
+        else:
+            yield  # do nothing for a ScriptFunction
 
     @staticmethod
     def preprocess_audio(audio: AnyArray) -> torch.Tensor:
