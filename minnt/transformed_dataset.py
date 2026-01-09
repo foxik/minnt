@@ -13,14 +13,26 @@ import torch
 class TransformedDataset(torch.utils.data.Dataset):
     """A dataset capable of applying transformations to its items and batches.
 
-    The transformation of individual items is specified by overriding the
-    [transform][minnt.TransformedDataset.transform] property.
+    Assuming the `TransformedDataset` is used within a [DataLoader][torch.utils.data.DataLoader],
+    batches are produced as follows:
 
-    The transformation of batches can be performed by overriding [collate][minnt.TransformedDataset.collate]
-    (processing a list of items into a batch) and/or [transform_batch][minnt.TransformedDataset.transform_batch]
-    (modifying the batch after collation). When any of these is overridden, the `collate_fn`
-    of a [torch.utils.data.DataLoader][] must be set to `self.collate_fn`, which is automatically done when using
-    the [dataloader][minnt.TransformedDataset.dataloader] method of this class.
+    - First, every element is retrieved from the source dataset using `__getitem__` (or a list of
+      all batch elements at the same time using `__getitems__`).
+    - Then, if [transform][minnt.TransformedDataset.transform] is defined, it is applied to each individual item.
+    - Next, if [collate][minnt.TransformedDataset.collate] is defined, it is applied to the list of items to form
+      a batch.
+    - Finally, if [transform_batch][minnt.TransformedDataset.transform_batch] is defined, it is applied to the batch.
+
+    Warning:
+      Given how PyTorch [torch.utils.data.DataLoader][] works, when specifying
+      [collate][minnt.TransformedDataset.collate] and/or [transform_batch][minnt.TransformedDataset.transform_batch],
+      the `collate_fn` of the DataLoader **must** be set to `self.collate_fn`.
+
+      This is automatically done when using the [dataloader][minnt.TransformedDataset.dataloader]
+      method of this class to create the [DataLoader][torch.utils.data.DataLoader]. However,
+      if you create a [DataLoader][torch.utils.data.DataLoader] manually, you **must** pass
+      `collate_fn=transformed_dataset.collate_fn` or otherwise [collate][minnt.TransformedDataset.collate]
+      and [transform_batch][minnt.TransformedDataset.transform_batch] will be ignored.
     """
     def __init__(self, dataset: torch.utils.data.Dataset, dataset_limit: int | None = None) -> None:
         """Create a new transformed dataset using the provided dataset with an optional limit.
@@ -35,6 +47,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         - `MINNT_DATASET_LIMIT`: If set to a positive integer, overrides the `dataset_limit` parameter.
         """
         self._dataset = dataset
+        self._dataset_has_getitems = hasattr(self._dataset, "__getitems__")
 
         if os.environ.get("MINNT_DATASET_LIMIT", "").isdecimal():
             dataset_limit = int(os.environ["MINNT_DATASET_LIMIT"])
@@ -51,6 +64,16 @@ class TransformedDataset(torch.utils.data.Dataset):
         if self.transform is not None:
             return self.transform(*item) if isinstance(item, tuple) else self.transform(item)
         return item
+
+    def __getitems__(self, indices: list[int]) -> Any:
+        """Return a batch of items at the specified indices."""
+        if self._dataset_has_getitems:
+            batch = self._dataset.__getitems__(indices)
+        else:
+            batch = [self._dataset[i] for i in indices]
+        if self.transform is not None:
+            batch = [self.transform(*item) if isinstance(item, tuple) else self.transform(item) for item in batch]
+        return batch
 
     @property
     def dataset(self) -> torch.utils.data.Dataset:
