@@ -28,7 +28,14 @@ class WandbLogger(BaseLogger):
           text_also_as_html: Whether to log text messages also as HTML.
             That has the advantage of interactive visualization of the value
             at different epochs and preserving whitespace formatting.
-          kwargs: Additional keyword arguments passed to `wandb.init()`.
+          kwargs: Additional keyword arguments passed to `wandb.init()`, for example:
+
+            - `dir` ([`str`][str]) – The directory where the Wandb files will be stored in a `wandb` subdirectory.
+            - `id` ([`str`][str]) – A unique identifier for this run.
+            - `name` ([`str`][str]) – A short display name for this run to use in the UI.
+            - `notes` ([`str`][str]) – A detailed description of the run.
+            - `tags` ([`Sequence`][collections.abc.Sequence][[`str`][str]]) – A list of tags
+              to label this run in the UI.
         """
         import wandb
         self.wandb = wandb
