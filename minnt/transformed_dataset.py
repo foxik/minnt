@@ -90,7 +90,10 @@ class TransformedDataset(torch.utils.data.Dataset):
     """If given, `collate` is called on a list of items before returning them as a batch."""
 
     transform_batch: Callable | None = None
-    """If given, `transform_batch` is called on a batch before returning it."""
+    """If given, `transform_batch` is called on a batch before returning it.
+
+    If the batch is a tuple, `transform_batch` is called with the tuple unpacked.
+    """
 
     def collate_fn(self, batch: list[Any]) -> Any:
         """A function for a DataLoader to collate a batch of items using `collate` and/or `transform_batch`.
@@ -102,7 +105,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         """
         batch = self.collate(batch) if self.collate is not None else torch.utils.data.dataloader.default_collate(batch)
         if self.transform_batch is not None:
-            batch = self.transform_batch(batch)
+            batch = self.transform_batch(*batch) if isinstance(batch, tuple) else self.transform_batch(batch)
         return batch
 
     def dataloader(
