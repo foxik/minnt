@@ -12,7 +12,7 @@ import zlib
 import torch
 
 from .base_logger import BaseLogger
-from ..type_aliases import AnyArray, TensorOrTensors
+from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
 from ..utils import sanitize_path
 
 
@@ -103,8 +103,8 @@ class FileSystemLogger(BaseLogger):
             print("# Traced Inlined Graph", traced.inlined_graph, file=file, sep="\n")
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        image = self.preprocess_image(image).numpy()
+    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
+        image = self.preprocess_image(image, dataformat).numpy()
 
         directory, label = self._split_label(label)
         os.makedirs(directory, exist_ok=True)

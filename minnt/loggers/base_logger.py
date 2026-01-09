@@ -8,7 +8,7 @@ from typing import Any, Self
 import torch
 
 from ..logger import Logger
-from ..type_aliases import AnyArray
+from ..type_aliases import AnyArray, Dataformat
 
 
 class BaseLogger(Logger):
@@ -54,9 +54,10 @@ class BaseLogger(Logger):
         return audio
 
     @staticmethod
-    def preprocess_image(image: AnyArray) -> torch.Tensor:
+    def preprocess_image(image: AnyArray, dataformat: Dataformat = "HWC") -> torch.Tensor:
         """Produce a CPU-based [torch.Tensor][] with `dtype=torch.uint8` and shape `(H, W, {1/3/4})`."""
         image = torch.as_tensor(image, device="cpu")
+        image = image.movedim(0, -1) if dataformat == "CHW" and image.ndim == 3 else image
         image = (image * 255 if image.dtype.is_floating_point else image).clamp(0, 255).to(torch.uint8)
         assert image.ndim == 2 or (image.ndim == 3 and image.shape[2] in (1, 2, 3, 4)), \
             "Image must have shape (H, W) or (H, W, 1/2/3/4)"

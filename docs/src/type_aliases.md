@@ -8,6 +8,8 @@
 
 ::: minnt.AnyArray
 
+::: minnt.Dataformat
+
 ::: minnt.HasCompute
     options:
       show_source: false

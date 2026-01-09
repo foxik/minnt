@@ -10,7 +10,7 @@ from typing import Any, Self
 import torch
 
 from .base_logger import BaseLogger
-from ..type_aliases import AnyArray, TensorOrTensors
+from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
 
 
 class WandbLogger(BaseLogger):
@@ -83,8 +83,8 @@ class WandbLogger(BaseLogger):
         self.run.unwatch(graph)
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int) -> Self:
-        image = self.preprocess_image(image).numpy()
+    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
+        image = self.preprocess_image(image, dataformat).numpy()
         self.run.log({label: self.wandb.Image(image)}, step=epoch)
         return self
 

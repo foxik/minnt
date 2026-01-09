@@ -17,6 +17,10 @@ PyTorch tensors, NumPy arrays, lists, and tuples are supported.
 """
 
 
+Dataformat: TypeAlias = Literal["HWC", "CHW"]
+"""A type alias for image data format description."""
+
+
 class HasCompute(Protocol):
     """A protocol for objects that have a compute method."""
 
