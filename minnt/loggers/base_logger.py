@@ -36,6 +36,7 @@ class BaseLogger(Logger):
     def format_epoch_logs(
         logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
     ) -> str:
+        """Make a human-readable string from epoch logs and other information."""
         return " ".join(
             [f"Epoch {epoch}" + (f"/{epochs}" if epochs is not None else "")]
             + ([f"{elapsed:.1f}s"] if elapsed is not None else [])
