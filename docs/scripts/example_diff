@@ -1,0 +1,13 @@
+#!/bin/sh
+
+[ $# -ge 2 ] || { echo "Usage: $0 example_file original_file" >&2; exit 1; }
+
+example_dir=$(dirname "$0")/../../examples
+
+example_file="$example_dir/$1"
+[ -f "$example_file" ] || { echo "Example file '$example_file' not found." >&2; exit 1; }
+
+original_file="$example_dir/$2"
+[ -f "$original_file" ] || { echo "Original file '$original_file' not found." >&2; exit 1; }
+
+diff -u2 "$original_file" "$example_file" | tail -n +3
