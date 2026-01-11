@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import contextlib
+import json
 from typing import Any, Self
 
 import torch
@@ -27,6 +28,19 @@ class BaseLogger(Logger):
         close and plt.close(figure)
 
         return self.log_image(label, image, epoch)
+
+    @staticmethod
+    def format_config_as_json(config: dict[str, Any]) -> str:
+        """Make a formatted JSON from configuration and epoch number."""
+        return json.dumps(dict(sorted(config.items())), ensure_ascii=False, indent=2)
+
+    @staticmethod
+    def format_config_as_text(config: dict[str, Any], epoch: int) -> str:
+        """Make a human-readable plain text from configuration and epoch number."""
+        return " ".join(
+            [f"Config epoch={epoch}"]
+            + [f"{k}={v}" for k, v in sorted(config.items())]
+        )
 
     @staticmethod
     def format_epoch_logs(

@@ -4,7 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 import html
-import json
 from typing import Any, Self
 
 import torch
@@ -63,10 +62,9 @@ class WandbLogger(BaseLogger):
         return self
 
     def log_config(self, config: dict[str, Any], epoch: int) -> Self:
-        config = dict(sorted(config.items()))
-        self.run.config.update(config)
-        config = json.dumps(config, ensure_ascii=False, indent=2)
-        self.run.log({"config": config} | self._maybe_as_html("config", config), step=epoch)
+        self.run.config.update(dict(sorted(config.items())))
+        config_json = self.format_config_as_json(config)
+        self.run.log({"config": config_json} | self._maybe_as_html("config", config_json), step=epoch)
         return self
 
     def log_epoch(

@@ -79,9 +79,7 @@ class FileSystemLogger(BaseLogger):
         return self
 
     def log_config(self, config: dict[str, Any], epoch: int) -> Self:
-        config = dict(sorted(config.items()))
-        print("Config", f"epoch={epoch}", *[f"{k}={v}" for k, v in config.items()],
-              file=self.get_file(), flush=True)
+        print(self.format_config_as_text(config, epoch), file=self.get_file(), flush=True)
         return self
 
     def log_epoch(

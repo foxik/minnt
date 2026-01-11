@@ -3,7 +3,6 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-import json
 import os
 from typing import Any, Self
 
@@ -67,9 +66,8 @@ class TensorBoardLogger(BaseLogger):
         return self
 
     def log_config(self, config: dict[str, Any], epoch: int) -> Self:
-        config = dict(sorted(config.items()))
         writer = self.get_writer("train")
-        writer.add_text("config", json.dumps(config, ensure_ascii=False, indent=2), epoch)
+        writer.add_text("config", self.format_config_as_json(config), epoch)
         writer.flush()
         return self
 
