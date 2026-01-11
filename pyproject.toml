@@ -37,3 +37,6 @@ torch = [
 [project.urls]
 Homepage = "https://minnt.org"
 Repository = "https://github.com/foxik/minnt"
+
+[tool.setuptools]
+packages = ["minnt"]
