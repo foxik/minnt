@@ -3,6 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+import gc
 import os
 import struct
 from typing import Any, Self, TextIO
@@ -98,10 +99,12 @@ class FileSystemLogger(BaseLogger):
             if isinstance(graph, torch.nn.Sequential):
                 print("# Sequential Module", graph, file=file, sep="\n", end="\n\n")
             with self.graph_in_eval_mode(graph), torch.no_grad():
-                traced = torch.jit.trace(graph, data, strict=False)
+                traced = torch.jit.trace(graph, data, check_trace=False, strict=False)
             print("# Traced Code", traced.code, file=file, sep="\n", end="\n\n")
             print("# Traced Graph", traced.graph, file=file, sep="\n")
             print("# Traced Inlined Graph", traced.inlined_graph, file=file, sep="\n")
+        del traced
+        gc.collect()  # Make sure the traced module is collected.
         return self
 
     def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
