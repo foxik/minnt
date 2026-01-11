@@ -16,8 +16,8 @@ a high-level API for training PyTorch models. It is a subclass of
   [test_step][minnt.TrainableModule.test_step], or [predict_step][minnt.TrainableModule.predict_step]
   methods.
 
-- The module automatically handles moving the model to a specified device,
-  using the first available accelerator (GPU, MPS, XPU) by default. To this end,
+- The module automatically handles moving the module to a specified device,
+  using the first available accelerator by default. To this end,
   [configure][minnt.TrainableModule.configure] or
   [load_weights][minnt.TrainableModule.load_weights] must always be called
   first before using the high-level API.
