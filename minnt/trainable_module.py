@@ -285,7 +285,7 @@ class TrainableModule(torch.nn.Module):
             `logdir` is given, [minnt.loggers.TensorBoardLogger][] is added to the loggers
             (specifying a list of loggers including `[]` prevents that).
           device: The device to move the module to. When `"auto"`, or `keep_previous`
-            with no previously set device, an accelerator [torch.accelerator.current_accelerator()][]
+            with no previously set device, an accelerator [torch.accelerator.current_accelerator][]
             is used if available, otherwise a CPU; furthermore, environment variable `MINNT_DEVICE`
             can be used to override the "auto" device selection.
 
@@ -698,7 +698,7 @@ class TrainableModule(torch.nn.Module):
           optimizer_path: An optional path to load the optimizer state from, relative to the
             model weights path.
           device: The device to load the module to. When `"auto"`, or `keep_previous`
-            with no previously set device, an accelerator [torch.accelerator.current_accelerator()][]
+            with no previously set device, an accelerator [torch.accelerator.current_accelerator][]
             is used if available, otherwise a CPU; furthermore, environment variable `MINNT_DEVICE`
             can be used to override the "auto" device selection.
 
