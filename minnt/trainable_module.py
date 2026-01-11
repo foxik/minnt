@@ -113,6 +113,12 @@ class ProgressLogger(tqdm.tqdm):
         self.set_description(message, refresh=False)
         super().refresh(nolock=nolock, lock_args=lock_args)
 
+    @staticmethod
+    def log_config(config: dict[str, Any], epoch: int, console: int | None, logger: Logger | None) -> None:
+        if ProgressLogger.current_console_verbosity(console) >= 1:
+            print(BaseLogger.format_config_as_text(config, epoch), flush=True)
+        logger and logger.log_config(config, epoch)
+
     def log_epoch(self, logs: dict[str, float], elapsed: float, logger: Logger | None = None) -> None:
         self._console and print(BaseLogger.format_epoch_logs(logs, self._epoch, self._epochs, elapsed), flush=True)
         logger and logger.log_epoch(logs, self._epoch, self._epochs, elapsed)
@@ -365,7 +371,7 @@ class TrainableModule(torch.nn.Module):
           The module is set to evaluation mode when returning from this method.
         """
         assert self.metrics is not None, "The TrainableModule has not been configured, run configure first."
-        log_config and self.logger.log_config(log_config, self.epoch)
+        log_config and ProgressLogger.log_config(log_config, self.epoch, console, self.logger)
         logs, epochs, stop_training = {}, self.epoch + epochs, False
         while self.epoch < epochs and not stop_training:
             self.epoch += 1
