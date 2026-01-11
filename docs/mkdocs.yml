@@ -69,6 +69,7 @@ plugins:
           line_length: 80
           extensions:
           - griffe_inherited_docstrings
+- markdown-exec
 markdown_extensions:
   pymdownx.arithmatex:
     generic: true

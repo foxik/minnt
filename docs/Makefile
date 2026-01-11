@@ -16,7 +16,7 @@ serve: $(prerequisities)
 
 venv:
 	python3 -m venv venv
-	venv/bin/pip install --no-cache-dir black mkdocs-material mkdocstrings-python griffe-inherited-docstrings
+	venv/bin/pip install --no-cache-dir black mkdocs-material mkdocstrings-python griffe-inherited-docstrings markdown-exec
 
 .PHONY: clean
 clean:
