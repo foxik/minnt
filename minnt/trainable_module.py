@@ -127,7 +127,9 @@ def compute_logs(logs: Logs) -> dict[str, float]:
 
 
 def get_auto_device() -> torch.device:
-    """Return an available accelerator or CPU if none is available."""
+    """Return an available accelerator or CPU if none is available, unless overridden by `MINNT_DEVICE`."""
+    if "MINNT_DEVICE" in os.environ:
+        return torch.device(os.environ["MINNT_DEVICE"])
     if torch.accelerator.is_available():
         return torch.accelerator.current_accelerator()
     return torch.device("cpu")
@@ -282,8 +284,10 @@ class TrainableModule(torch.nn.Module):
           loggers: An optional list of loggers to use for logging; when not specified and
             `logdir` is given, [minnt.loggers.TensorBoardLogger][] is added to the loggers
             (specifying a list of loggers including `[]` prevents that).
-          device: The device to move the module to. When "auto", or `keep_previous`
-            with no previously set device, the first of cuda/mps/xpu is used if available.
+          device: The device to move the module to. When `"auto"`, or `keep_previous`
+            with no previously set device, an accelerator [torch.accelerator.current_accelerator()][]
+            is used if available, otherwise a CPU; furthermore, environment variable `MINNT_DEVICE`
+            can be used to override the "auto" device selection.
 
         Returns:
           self
@@ -693,8 +697,10 @@ class TrainableModule(torch.nn.Module):
           path: The path to load the model weights from.
           optimizer_path: An optional path to load the optimizer state from, relative to the
             model weights path.
-          device: The device to load the model to; when "auto", or `keep_previous` with no previously
-            set device, the first of cuda/mps/xpu is used if available.
+          device: The device to load the module to. When `"auto"`, or `keep_previous`
+            with no previously set device, an accelerator [torch.accelerator.current_accelerator()][]
+            is used if available, otherwise a CPU; furthermore, environment variable `MINNT_DEVICE`
+            can be used to override the "auto" device selection.
 
         Returns:
           self
