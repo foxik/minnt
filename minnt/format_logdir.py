@@ -41,6 +41,15 @@ def format_logdir(logdir_template: str, **kwargs: Any) -> str:
 
     Returns:
       The formatted log directory path.
+
+    Example:
+      ```python
+      parser = argparse.ArgumentParser()
+      ...
+      args = parser.parse_args()
+
+      logdir = minnt.format_logdir("logs/{file-}{timestamp}{-config}", **vars(args))
+      ```
     """
     # Create {config} placeholder.
     items = [(re.sub("(.)[^-_]*[-_]?", r"\1", str(k)), str(v)) for k, v in sorted(kwargs.items())]
