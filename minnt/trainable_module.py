@@ -786,6 +786,9 @@ class TrainableModule(torch.nn.Module):
             being shown (console verbosity 2 and writing to the console, or console verbosity 3).
           console: Controls the current console verbosity. The default is 2, but can be overridden by the
             `MINNT_PROGRESS` environment variable.
+
+        Returns:
+          self
         """
         console = ProgressLogger.get_console_verbosity(console)
         if progress_only and ((console == 2 and sys.stderr.isatty()) or console >= 3):
