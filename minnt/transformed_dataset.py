@@ -9,6 +9,8 @@ from typing import Any
 
 import torch
 
+from .utils import tuple_list
+
 
 class TransformedDataset(torch.utils.data.Dataset):
     """A dataset capable of applying transformations to its items and batches.
@@ -62,7 +64,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         """Return the item at the specified index."""
         item = self._dataset[index]
         if self.transform is not None:
-            return self.transform(*item) if isinstance(item, tuple) else self.transform(item)
+            return self.transform(*item) if isinstance(item, tuple_list) else self.transform(item)
         return item
 
     def __getitems__(self, indices: list[int]) -> Any:
@@ -72,7 +74,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         else:
             batch = [self._dataset[i] for i in indices]
         if self.transform is not None:
-            batch = [self.transform(*item) if isinstance(item, tuple) else self.transform(item) for item in batch]
+            batch = [self.transform(*item) if isinstance(item, tuple_list) else self.transform(item) for item in batch]
         return batch
 
     @property
@@ -83,7 +85,7 @@ class TransformedDataset(torch.utils.data.Dataset):
     transform: Callable | None = None
     """If given, `transform` is called on each item before returning it.
 
-    If the dataset item is a tuple, `transform` is called with the tuple unpacked.
+    If the dataset item is a tuple or a list, `transform` is called with it unpacked.
     """
 
     collate: Callable | None = None
@@ -92,7 +94,7 @@ class TransformedDataset(torch.utils.data.Dataset):
     transform_batch: Callable | None = None
     """If given, `transform_batch` is called on a batch before returning it.
 
-    If the batch is a tuple, `transform_batch` is called with the tuple unpacked.
+    If the batch is a tuple or a list, `transform_batch` is called with it unpacked.
     """
 
     def collate_fn(self, batch: list[Any]) -> Any:
@@ -105,7 +107,7 @@ class TransformedDataset(torch.utils.data.Dataset):
         """
         batch = self.collate(batch) if self.collate is not None else torch.utils.data.dataloader.default_collate(batch)
         if self.transform_batch is not None:
-            batch = self.transform_batch(*batch) if isinstance(batch, tuple) else self.transform_batch(batch)
+            batch = self.transform_batch(*batch) if isinstance(batch, tuple_list) else self.transform_batch(batch)
         return batch
 
     def dataloader(
