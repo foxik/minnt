@@ -10,7 +10,7 @@ import torch
 import torch.utils.tensorboard
 
 from .base_logger import BaseLogger
-from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
+from ..type_aliases import AnyArray, DataFormat, TensorOrTensors
 
 
 class TensorBoardLogger(BaseLogger):
@@ -92,8 +92,8 @@ class TensorBoardLogger(BaseLogger):
         writer.flush()
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
-        image = self.preprocess_image(image, dataformat)
+    def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
+        image = self.preprocess_image(image, data_format)
         writer, label = self._get_writer_from_label(label)
         writer.add_image(label, image, epoch, dataformats="HWC" if image.ndim == 3 else "HW")
         writer.flush()

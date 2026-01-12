@@ -10,7 +10,7 @@ import torch
 
 from .base_logger import BaseLogger
 from ..logger import Logger
-from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
+from ..type_aliases import AnyArray, DataFormat, TensorOrTensors
 
 
 class MultiLogger(BaseLogger):
@@ -60,9 +60,9 @@ class MultiLogger(BaseLogger):
             logger.log_graph(graph, data, epoch)
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
+    def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
         for logger in self.loggers:
-            logger.log_image(label, image, epoch, dataformat)
+            logger.log_image(label, image, epoch, data_format)
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:

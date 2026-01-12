@@ -10,7 +10,7 @@ import torch
 
 from .base_logger import BaseLogger
 from ..metric import Metric
-from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
+from ..type_aliases import AnyArray, DataFormat, TensorOrTensors
 
 
 class WandbLogger(BaseLogger):
@@ -91,8 +91,8 @@ class WandbLogger(BaseLogger):
         self.run.unwatch(watched_children)
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
-        image = self.preprocess_image(image, dataformat).numpy()
+    def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
+        image = self.preprocess_image(image, data_format).numpy()
         self.run.log({label: self.wandb.Image(image)}, step=epoch)
         return self
 

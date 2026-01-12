@@ -8,7 +8,7 @@ from typing import Any, Self
 
 import torch
 
-from .type_aliases import AnyArray, Dataformat, TensorOrTensors
+from .type_aliases import AnyArray, DataFormat, TensorOrTensors
 
 
 class Logger(ABC):
@@ -91,13 +91,13 @@ class Logger(ABC):
         ...
 
     @abstractmethod
-    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
+    def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
         """Log the given image with the given label at the given epoch.
 
         Parameters:
           label: The label of the logged image.
           image: The image to log, represented as an array of any of the
-            following shapes (assuming `"HWC"` dataformat):
+            following shapes (assuming `"HWC"` data format):
 
             - `(H, W)` or `(H, W, 1)` for grayscale images,
             - `(H, W, 2)` for grayscale images with alpha channel,
@@ -108,7 +108,7 @@ class Logger(ABC):
             to be in the `[0, 1]` range; otherwise, they are assumed to be in the
             `[0, 255]` range.
           epoch: The epoch number at which the image is logged.
-          dataformat: The data format of the image specifying whether the channels
+          data_format: The data format of the image specifying whether the channels
             are stored in the last dimension (`"HWC"`, the default) or in the first dimension (`"CHW"`).
         """
         ...

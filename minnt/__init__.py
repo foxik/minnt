@@ -10,7 +10,7 @@ from .trainable_module import TrainableModule
 from .transformed_dataset import TransformedDataset
 
 # Type aliases
-from .type_aliases import AnyArray, Dataformat, HasCompute, Logs, Reduction, Tensor, TensorOrTensors
+from .type_aliases import AnyArray, DataFormat, HasCompute, Logs, Reduction, Tensor, TensorOrTensors
 
 # Vocabulary
 from .vocabulary import Vocabulary

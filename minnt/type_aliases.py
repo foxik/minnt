@@ -17,7 +17,7 @@ PyTorch tensors, NumPy arrays, lists, and tuples are supported.
 """
 
 
-Dataformat: TypeAlias = Literal["HWC", "CHW"]
+DataFormat: TypeAlias = Literal["HWC", "CHW"]
 """A type alias for image data format description."""
 
 

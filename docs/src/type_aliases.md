@@ -8,7 +8,7 @@
 
 ::: minnt.AnyArray
 
-::: minnt.Dataformat
+::: minnt.DataFormat
 
 ::: minnt.HasCompute
     options:

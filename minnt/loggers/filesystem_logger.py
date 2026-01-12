@@ -13,7 +13,7 @@ import zlib
 import torch
 
 from .base_logger import BaseLogger
-from ..type_aliases import AnyArray, Dataformat, TensorOrTensors
+from ..type_aliases import AnyArray, DataFormat, TensorOrTensors
 from ..utils import sanitize_path
 
 
@@ -105,8 +105,8 @@ class FileSystemLogger(BaseLogger):
         gc.collect()  # Make sure the traced module is collected.
         return self
 
-    def log_image(self, label: str, image: AnyArray, epoch: int, dataformat: Dataformat = "HWC") -> Self:
-        image = self.preprocess_image(image, dataformat).numpy()
+    def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
+        image = self.preprocess_image(image, data_format).numpy()
 
         directory, label = self._split_label(label)
         os.makedirs(directory, exist_ok=True)
