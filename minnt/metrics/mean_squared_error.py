@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from typing import Self
+
 import torch
 
 from .mean import Mean
@@ -20,7 +22,7 @@ class MeanSquaredError(Mean):
     @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
-    ) -> None:
+    ) -> Self:
         """Update the accumulated mean squared error by introducing new values.
 
         Optional sample weight might be provided; if not, all values are weighted with 1.
@@ -31,5 +33,8 @@ class MeanSquaredError(Mean):
           y_true: The ground-truth targets.
           sample_weights: Optional sample weights. If provided, their shape must be broadcastable
             to a prefix of a shape of `y_true`, and the loss for each sample is weighted accordingly.
+
+        Returns:
+          self
         """
-        super().update(self._mse_loss(y, y_true), sample_weights=sample_weights)
+        return super().update(self._mse_loss(y, y_true), sample_weights=sample_weights)

@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from abc import ABC, abstractmethod
+from typing import Self
 
 import torch
 
@@ -16,7 +17,7 @@ class Metric(torch.nn.Module, ABC):
     @abstractmethod
     def update(
         self, y: TensorOrTensors, y_true: TensorOrTensors | None = None, sample_weights: TensorOrTensors | None = None,
-    ) -> None:
+    ) -> Self:
         """Update the internal state of the metric with new predictions and possibly gold targets.
 
         Optional sample weights might be provided if supported by the metric.
@@ -25,6 +26,9 @@ class Metric(torch.nn.Module, ABC):
           y: The predicted outputs.
           y_true: Optional ground-truth targets.
           sample_weights: Optional sample weights.
+
+        Returns:
+          self
         """
         ...
 
@@ -38,6 +42,10 @@ class Metric(torch.nn.Module, ABC):
         ...
 
     @abstractmethod
-    def reset(self) -> None:
-        """Reset the internal state of the metric."""
+    def reset(self) -> Self:
+        """Reset the internal state of the metric.
+
+        Returns:
+          self
+        """
         ...

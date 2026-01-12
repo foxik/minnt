@@ -4,8 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 from collections.abc import Iterable
+from typing import Any, Self
+
 import torch
-from typing import Any
 
 from .mean import Mean
 
@@ -41,7 +42,7 @@ class ExactMatch(Mean):
         y: torch.Tensor | Iterable[Any],
         y_true: torch.Tensor | Iterable[Any],
         sample_weights: torch.Tensor | None = None,
-    ) -> None:
+    ) -> Self:
         """Update the exact match by comparing the given values.
 
         The inputs can be either both tensors or both iterables. When they are both tensors,
@@ -56,6 +57,9 @@ class ExactMatch(Mean):
           y_true: A tensor or an iterable of ground-truth targets of the same shape as `y`.
           sample_weights: Optional sample weights. Their shape must be broadcastable to a
             prefix of the shape of `y` (with `element_dims` dimensions removed, if specified).
+
+        Returns:
+          self
         """
         if isinstance(y, torch.Tensor) and isinstance(y_true, torch.Tensor):
             assert y.shape == y_true.shape, "The y and y_true tensors must have the same shape."
@@ -67,4 +71,4 @@ class ExactMatch(Mean):
             assert not self._element_dims, "Nonempty element_dims can only be used with tensor inputs."
             equals = torch.tensor([pred == true for pred, true in zip(y, y_true, strict=True)], dtype=torch.float32)
 
-        super().update(equals, sample_weights=sample_weights)
+        return super().update(equals, sample_weights=sample_weights)

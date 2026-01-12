@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from typing import Self
+
 import torch
 
 from .mean import Mean
@@ -31,7 +33,7 @@ class BinaryAccuracy(Mean):
     @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor, sample_weights: torch.Tensor | None = None,
-    ) -> None:
+    ) -> Self:
         """Update the accumulated binary accuracy using new predictions and gold labels.
 
         Optional sample weight might be provided; if not, all values are weighted with 1.
@@ -43,6 +45,9 @@ class BinaryAccuracy(Mean):
           y_true: The ground-truth targets; they are rounded to 0 or 1 to obtain binary labels.
           sample_weights: Optional sample weights. If provided, their shape must be broadcastable
             to a prefix of a shape of `y_true`, and the loss for each sample is weighted accordingly.
+
+        Returns:
+          self
         """
         y = maybe_remove_one_singleton_dimension(y, y_true)
         assert y.shape == y_true.shape, f"Shapes of y {y.shape} and y_true {y_true.shape} have to match " \
@@ -51,4 +56,4 @@ class BinaryAccuracy(Mean):
         y = (y > (0.5 if self._probs else 0.0))
         y_true = (y_true > 0.5)
 
-        super().update(y == y_true, sample_weights=sample_weights)
+        return super().update(y == y_true, sample_weights=sample_weights)

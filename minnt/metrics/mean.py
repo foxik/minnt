@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+from typing import Self
+
 import torch
 
 from ..metric import Metric
@@ -21,7 +23,7 @@ class Mean(Metric):
     @torch.no_grad
     def update(
         self, y: torch.Tensor, y_true: torch.Tensor | None = None, sample_weights: torch.Tensor | None = None,
-    ) -> None:
+    ) -> Self:
         """Update the accumulated mean by introducing new values.
 
         Optional sample weight might be provided; if not, all values are weighted with 1.
@@ -30,6 +32,9 @@ class Mean(Metric):
           y: The values to average.
           y_true: This parameter is present for [minnt.Metric][] compatibility, but must be `None` for this metric.
           sample_weights: Optional sample weights. Their shape must be broadcastable to a prefix of the shape of `y`.
+
+        Returns:
+          self
         """
         assert y_true is None, "The y_true parameter must be None for the Mean metric."
 
@@ -39,9 +44,12 @@ class Mean(Metric):
         self._total.add_(torch.sum(y * sample_weights) if sample_weights is not None else torch.sum(y))
         self._count.add_(torch.sum(sample_weights) if sample_weights is not None else y.numel())
 
+        return self
+
     def compute(self) -> torch.Tensor:
         return self._total / self._count
 
     def reset(self):
         self._total.zero_()
         self._count.zero_()
+        return self
