@@ -22,8 +22,13 @@ DataFormat: TypeAlias = Literal["HWC", "CHW"]
 
 
 class HasCompute(Protocol):
-    """A protocol for objects that have a compute method."""
+    """A protocol for objects that have a `compute` method of the following type:
 
+    ```python
+    def compute(self) -> float | torch.Tensor | np.ndarray:
+        ...
+    ```
+    """
     def compute(self) -> float | torch.Tensor | np.ndarray:
         """Compute the value of the object."""
         ...
