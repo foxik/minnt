@@ -60,7 +60,7 @@ from .loss import Loss
 from .metric import Metric
 from .metrics import Mean
 from .type_aliases import Logs, TensorOrTensors
-from .utils import fill_and_standardize_path
+from .utils import fill_and_standardize_path, tuple_list
 
 
 class KeepPrevious:
@@ -184,7 +184,7 @@ def tensors_to_device_as_tuple(x: TensorOrTensors, device: torch.device) -> tupl
     """Asynchronously move input tensor data structure to a given device, returning a (possibly one-element) tuple."""
     if isinstance(x, (torch.Tensor, torch.nn.utils.rnn.PackedSequence)):
         return (x.to(device),)
-    elif isinstance(x, (tuple, list)):
+    elif isinstance(x, tuple_list):
         return tuple(tensors_to_device(a, device) for a in x)
     elif isinstance(x, dict):
         return ({k: tensors_to_device(v, device) for k, v in x.items()},)
@@ -211,7 +211,7 @@ def validate_batch_input_output(
     batch: tuple[TensorOrTensors, TensorOrTensors],
 ) -> tuple[TensorOrTensors, TensorOrTensors]:
     """Validate that the given batch is an (input, output) pair and return it."""
-    assert isinstance(batch, (tuple, list)) and len(batch) == 2, "The batch must be an (input, output) pair."
+    assert isinstance(batch, tuple_list) and len(batch) == 2, "The batch must be an (input, output) pair."
     return batch
 
 
@@ -220,7 +220,7 @@ def validate_batch_input(
 ) -> TensorOrTensors:
     """If with_labels is True, validate that the given batch is an (input, _) pair and return the input."""
     if with_labels:
-        assert isinstance(batch, (tuple, list)) and len(batch) == 2, "The batch must be an (input, _) pair."
+        assert isinstance(batch, tuple_list) and len(batch) == 2, "The batch must be an (input, _) pair."
         batch = batch[0]
     return batch
 

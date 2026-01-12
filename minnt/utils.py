@@ -84,3 +84,6 @@ def sanitize_path(path: str) -> str:
       The sanitized path.
     """
     return re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", path)
+
+
+tuple_list: tuple[type, type] = (tuple, list)
