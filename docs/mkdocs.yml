@@ -71,6 +71,7 @@ plugins:
           - griffe_inherited_docstrings
 - markdown-exec
 markdown_extensions:
+  attr_list:
   pymdownx.arithmatex:
     generic: true
     inline_syntax: [dollar]
