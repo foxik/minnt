@@ -208,15 +208,15 @@ def tensors_to_numpy(x: TensorOrTensors) -> TensorOrTensors:
 
 
 def validate_batch_input_output(
-    batch: tuple[TensorOrTensors, TensorOrTensors],
-) -> tuple[TensorOrTensors, TensorOrTensors]:
+    batch: tuple[TensorOrTensors, TensorOrTensors] | list[TensorOrTensors],
+) -> tuple[TensorOrTensors, TensorOrTensors] | list[TensorOrTensors]:
     """Validate that the given batch is an (input, output) pair and return it."""
     assert isinstance(batch, tuple_list) and len(batch) == 2, "The batch must be an (input, output) pair."
     return batch
 
 
 def validate_batch_input(
-    batch: TensorOrTensors | tuple[TensorOrTensors, TensorOrTensors], with_labels: bool,
+    batch: TensorOrTensors | tuple[TensorOrTensors, TensorOrTensors] | list[TensorOrTensors], with_labels: bool,
 ) -> TensorOrTensors:
     """If with_labels is True, validate that the given batch is an (input, _) pair and return the input."""
     if with_labels:
