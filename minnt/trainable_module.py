@@ -624,7 +624,7 @@ class TrainableModule(torch.nn.Module):
         else:
             raise RuntimeError(f"Cannot unpack batch of type {type(y)} into individual items.")
 
-    def predict_tensors(
+    def predict_tensor(
         self,
         dataloader: torch.utils.data.DataLoader,
         *,
