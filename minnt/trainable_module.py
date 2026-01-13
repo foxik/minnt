@@ -388,7 +388,7 @@ class TrainableModule(torch.nn.Module):
                 log_graph = log_graph and self.logger.log_graph(self.module or self, xs, self.epoch - 1) and False
             if dev is not None:
                 compute_logs(logs)
-                logs |= {f"dev:{k}": v for k, v in self.eval().evaluate(dev, log_as=None).items()}
+                logs |= self.eval().evaluate(dev, "dev", log_results=False, console=console)
             for callback in callbacks:
                 stop_training = callback(self.eval(), self.epoch, compute_logs(logs)) is STOP_TRAINING or stop_training
             data_with_progress.log_epoch(compute_logs(logs), self.epoch, time.time() - start, self.logger)
@@ -474,8 +474,9 @@ class TrainableModule(torch.nn.Module):
     def evaluate(
         self,
         dataloader: torch.utils.data.DataLoader,
+        dataset_name: str | None = "test",
         *,
-        log_as: str | None = "test",
+        log_results: bool = True,
         callbacks: list[Callback] = [],
         console: int | None = None,
     ) -> Logs:
@@ -489,7 +490,9 @@ class TrainableModule(torch.nn.Module):
         Parameters:
           dataloader: The dataset to evaluate on, each element a pair of inputs and outputs;
             the inputs and outputs can be either single tensors or tensor structures.
-          log_as: The name of the dataset used in the logs; when `None`, no progress or logs are produced.
+          dataset_name: An optional name of the dataset used as a prefix of the metric names in the logs.
+          log_results: If `True` (the default), the evaluation results are logged using the module logger,
+            and they are also printed (if `console` is not 0); if `False`, they are just returned.
           callbacks: A list of callbacks to call after the evaluation, each implementing
             the [minnt.Callback][] protocol with arguments `self`, `epoch`, and `logs`.
           console: Controls the console verbosity: 0 for silent, 1 for a single message,
@@ -497,7 +500,8 @@ class TrainableModule(torch.nn.Module):
             The default is 2, but can be overridden by the `MINNT_PROGRESS` environment variable.
 
         Returns:
-          logs: A dictionary of logs from the evaluation; the logs are fully evaluated to just float values.
+          logs: A dictionary of logs from the evaluation, each name prefixed with `f"{dataset_name}:"`
+            if `dataset_name` is given; the logs are fully evaluated to just float values.
 
         Note:
           The module is set to evaluation mode when returning from this method.
@@ -508,17 +512,17 @@ class TrainableModule(torch.nn.Module):
         for metric in self.metrics.values():
             metric.reset()
         start, logs = time.time(), {}
-        data_with_progress = ProgressLogger(dataloader, lambda: logs, console if log_as is not None else 0, "Evaluation")
+        data_with_progress = ProgressLogger(dataloader, lambda: logs, console, "Evaluation")
         for batch in data_with_progress:
             xs, y = validate_batch_input_output(batch)
             xs = tensors_to_device_as_tuple(xs, self.device)
             y = tensors_to_device(y, self.device)
             logs = self.test_step(xs, y)
-            logs = {f"{log_as}:{k}": v for k, v in logs.items()} if log_as else logs
+            logs = {f"{dataset_name}:{k}": v for k, v in logs.items()} if dataset_name else logs
         for callback in callbacks:
             callback(self.eval(), self.epoch, compute_logs(logs))
-        data_with_progress.log_epoch(
-            compute_logs(logs), self.epoch, time.time() - start, self.logger if log_as is not None else None)
+        compute_logs(logs)
+        log_results and data_with_progress.log_epoch(logs, self.epoch, time.time() - start, self.logger)
         self.eval()
         return logs
 
