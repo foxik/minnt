@@ -50,4 +50,4 @@ class KeepBestWeights(Callback):
                 or (self._mode == "min" and logs[self._metric] < self.best_value)):
             self.best_value = logs[self._metric]
             self.best_state_dict = {k: v.to(device=self._device, copy=True)
-                                    for k, v in module.model.state_dict().items()}
+                                    for k, v in module.state_dict().items()}
