@@ -13,24 +13,24 @@ from ..metric import Metric
 from ..type_aliases import AnyArray, DataFormat, TensorOrTensors
 
 
-class WandbLogger(BaseLogger):
-    """A Wandb logger interface.
+class WandBLogger(BaseLogger):
+    """A W&B logger interface.
 
     The text values are by default also logged as HTML for better visualization.
     """
     def __init__(self, project: str, *, text_also_as_html: bool = True, **kwargs: Any) -> None:
-        """Create the WandbLogger with the given project name.
+        """Create the WandBLogger with the given project name.
 
         Additional keyword arguments are passed to `wandb.init()`.
 
         Parameters:
-          project: The name of the Wandb project.
+          project: The name of the W&B project.
           text_also_as_html: Whether to log text messages also as HTML.
             That has the advantage of interactive visualization of the value
             at different epochs and preserving whitespace formatting.
           kwargs: Additional keyword arguments passed to `wandb.init()`, for example:
 
-            - `dir` ([`str`][str]) – The directory where the Wandb files will be stored in a `wandb` subdirectory.
+            - `dir` ([`str`][str]) – The directory where the W&B files will be stored in a `wandb` subdirectory.
             - `id` ([`str`][str]) – A unique identifier for this run.
             - `name` ([`str`][str]) – A short display name for this run to use in the UI.
             - `notes` ([`str`][str]) – A detailed description of the run.
@@ -71,7 +71,7 @@ class WandbLogger(BaseLogger):
         return super().log_figure(label, figure, epoch, tight_layout, close)
 
     def log_graph(self, graph: torch.nn.Module, data: TensorOrTensors, epoch: int) -> Self:
-        # The logging in Wandb has a lot of limitations. One is that all
+        # The logging in WandB has a lot of limitations. One is that all
         # children of the graph must be executed before the graph is logged;
         # however, metrics are usually not executed during the forward pass.
         # We therefore try to exclude metrics from the logged graph.

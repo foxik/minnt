@@ -7,4 +7,4 @@ from .base_logger import BaseLogger
 from .filesystem_logger import FileSystemLogger
 from .multi_logger import MultiLogger
 from .tensorboard_logger import TensorBoardLogger
-from .wandb_logger import WandbLogger
+from .wandb_logger import WandBLogger

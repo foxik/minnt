@@ -1,3 +1,3 @@
-# WandbLogger
+# WandBLogger
 
-::: minnt.loggers.WandbLogger
+::: minnt.loggers.WandBLogger
