@@ -67,12 +67,6 @@ class WandbLogger(BaseLogger):
         self.run.log({"config": config_json} | self._maybe_as_html("config", config_json), step=epoch)
         return self
 
-    def log_epoch(
-        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> Self:
-        self.run.log(logs, step=epoch)
-        return self
-
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         return super().log_figure(label, figure, epoch, tight_layout, close)
 
@@ -94,6 +88,10 @@ class WandbLogger(BaseLogger):
     def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
         image = self.preprocess_image(image, data_format).numpy()
         self.run.log({label: self.wandb.Image(image)}, step=epoch)
+        return self
+
+    def log_metrics(self, logs: dict[str, float], epoch: int, description: str | None = None) -> Self:
+        self.run.log(logs, step=epoch)
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:

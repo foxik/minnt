@@ -50,20 +50,6 @@ class Logger(ABC):
         ...
 
     @abstractmethod
-    def log_epoch(
-        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> Self:
-        """Log metrics collected during a given epoch.
-
-        Parameters:
-          logs: A dictionary of logged metrics for the epoch.
-          epoch: The epoch number at which the logs were collected.
-          epochs: The total number of epochs, if known.
-          elapsed: The time elapsed during the epoch, in seconds, if known.
-        """
-        ...
-
-    @abstractmethod
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         """Log the given matplotlib Figure with the given label at the given epoch.
 
@@ -111,6 +97,17 @@ class Logger(ABC):
           data_format: The data format of the image specifying whether the channels
             are stored in the last dimension (`"HWC"`, the default) or in the first dimension (`"CHW"`);
             ignored for a `PIL` image.
+        """
+        ...
+
+    @abstractmethod
+    def log_metrics(self, logs: dict[str, float], epoch: int, description: str | None = None) -> Self:
+        """Log metrics collected during a given epoch, with an optional description.
+
+        Parameters:
+          logs: A dictionary of logged metrics for the epoch.
+          epoch: The epoch number at which the logs were collected.
+          description: An optional description of the logged metrics (used only by some loggers).
         """
         ...
 

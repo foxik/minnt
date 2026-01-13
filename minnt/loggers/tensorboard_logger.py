@@ -71,18 +71,6 @@ class TensorBoardLogger(BaseLogger):
         writer.flush()
         return self
 
-    def log_epoch(
-        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> Self:
-        for label, value in logs.items():
-            writer, label = self._get_writer_from_label(label)
-            writer.add_scalar(label, value, epoch)
-
-        for writer in self._writers.values():
-            writer.flush()
-
-        return self
-
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         return super().log_figure(label, figure, epoch, tight_layout, close)
 
@@ -97,6 +85,16 @@ class TensorBoardLogger(BaseLogger):
         writer, label = self._get_writer_from_label(label)
         writer.add_image(label, image, epoch, dataformats="HWC" if image.ndim == 3 else "HW")
         writer.flush()
+        return self
+
+    def log_metrics(self, logs: dict[str, float], epoch: int, description: str | None = None) -> Self:
+        for label, value in logs.items():
+            writer, label = self._get_writer_from_label(label)
+            writer.add_scalar(label, value, epoch)
+
+        for writer in self._writers.values():
+            writer.flush()
+
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:

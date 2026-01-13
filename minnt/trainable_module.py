@@ -86,8 +86,7 @@ class ProgressLogger(tqdm.tqdm):
         return console
 
     def __init__(
-        self, data: Iterable, logs_fn: Callable[[], Logs] | None, console: int | None,
-        epoch: int | None = None, epochs: int | None = None,
+        self, data: Iterable, logs_fn: Callable[[], Logs] | None, console: int | None, description: str | None = None,
     ) -> None:
         console = self.current_console_verbosity(console)
 
@@ -97,8 +96,7 @@ class ProgressLogger(tqdm.tqdm):
             kwargs["mininterval"] = None
 
         self._console = console
-        self._epoch = epoch
-        self._epochs = epochs
+        self._description = description
         self._logs_fn = logs_fn
         super().__init__(data, unit="batch", leave=False, disable=None if console == 2 else console < 2, **kwargs)
 
@@ -107,10 +105,10 @@ class ProgressLogger(tqdm.tqdm):
             ProgressLogger._report_only_first -= 1
         elif ProgressLogger._report_only_first == 0:
             return
-        message = "Predicting"
+        description = self._description
         if self._logs_fn is not None:
-            message = BaseLogger.format_epoch_logs(compute_logs(self._logs_fn()), self._epoch, self._epochs)
-        self.set_description(message, refresh=False)
+            description += " " + BaseLogger.format_metrics(compute_logs(self._logs_fn()))
+        self.set_description(description, refresh=False)
         super().refresh(nolock=nolock, lock_args=lock_args)
 
     @staticmethod
@@ -119,9 +117,10 @@ class ProgressLogger(tqdm.tqdm):
             print(BaseLogger.format_config_as_text(config, epoch), flush=True)
         logger and logger.log_config(config, epoch)
 
-    def log_epoch(self, logs: dict[str, float], elapsed: float, logger: Logger | None = None) -> None:
-        self._console and print(BaseLogger.format_epoch_logs(logs, self._epoch, self._epochs, elapsed), flush=True)
-        logger and logger.log_epoch(logs, self._epoch, self._epochs, elapsed)
+    def log_epoch(self, logs: dict[str, float], epoch: int, elapsed: float, logger: Logger | None = None) -> None:
+        description = self._description + f" {elapsed:.1f}s"
+        self._console and print(description, BaseLogger.format_metrics(logs), flush=True)
+        logger and logger.log_metrics(logs, epoch, description)
 
 
 def compute_logs(logs: Logs) -> dict[str, float]:
@@ -380,7 +379,7 @@ class TrainableModule(torch.nn.Module):
             for metric in self.metrics.values():
                 metric.reset()
             start, logs = time.time(), {}
-            data_with_progress = ProgressLogger(dataloader, lambda: logs, console, self.epoch, epochs)
+            data_with_progress = ProgressLogger(dataloader, lambda: logs, console, f"Epoch {self.epoch}/{epochs}")
             for batch in data_with_progress:
                 xs, y = validate_batch_input_output(batch)
                 xs = tensors_to_device_as_tuple(xs, self.device)
@@ -392,7 +391,7 @@ class TrainableModule(torch.nn.Module):
                 logs |= {f"dev:{k}": v for k, v in self.eval().evaluate(dev, log_as=None).items()}
             for callback in callbacks:
                 stop_training = callback(self.eval(), self.epoch, compute_logs(logs)) is STOP_TRAINING or stop_training
-            data_with_progress.log_epoch(compute_logs(logs), time.time() - start, self.logger)
+            data_with_progress.log_epoch(compute_logs(logs), self.epoch, time.time() - start, self.logger)
         self.eval()
         return logs
 
@@ -509,7 +508,7 @@ class TrainableModule(torch.nn.Module):
         for metric in self.metrics.values():
             metric.reset()
         start, logs = time.time(), {}
-        data_with_progress = ProgressLogger(dataloader, lambda: logs, console if log_as is not None else 0, self.epoch)
+        data_with_progress = ProgressLogger(dataloader, lambda: logs, console if log_as is not None else 0, "Evaluation")
         for batch in data_with_progress:
             xs, y = validate_batch_input_output(batch)
             xs = tensors_to_device_as_tuple(xs, self.device)
@@ -519,7 +518,7 @@ class TrainableModule(torch.nn.Module):
         for callback in callbacks:
             callback(self.eval(), self.epoch, compute_logs(logs))
         data_with_progress.log_epoch(
-            compute_logs(logs), time.time() - start, self.logger if log_as is not None else None)
+            compute_logs(logs), self.epoch, time.time() - start, self.logger if log_as is not None else None)
         self.eval()
         return logs
 
@@ -574,7 +573,7 @@ class TrainableModule(torch.nn.Module):
         """
         assert self.device is not None, "No device has been set for the TrainableModule, run configure first."
         self.eval()
-        for batch in ProgressLogger(dataloader, logs_fn=None, console=console):
+        for batch in ProgressLogger(dataloader, logs_fn=None, console=console, description="Prediction"):
             xs = validate_batch_input(batch, with_labels=data_with_labels)
             xs = tensors_to_device_as_tuple(xs, self.device)
             y = self.predict_step(xs)

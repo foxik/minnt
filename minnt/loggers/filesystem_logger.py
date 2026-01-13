@@ -82,12 +82,6 @@ class FileSystemLogger(BaseLogger):
         print(self.format_config_as_text(config, epoch), file=self.get_file(), flush=True)
         return self
 
-    def log_epoch(
-        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> Self:
-        print(self.format_epoch_logs(logs, epoch, epochs, elapsed), file=self.get_file(), flush=True)
-        return self
-
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         return super().log_figure(label, figure, epoch, tight_layout, close)
 
@@ -124,6 +118,10 @@ class FileSystemLogger(BaseLogger):
             add_block(b"IDAT", zlib.compress(b"".join(pixels), level=9))
             add_block(b"IEND", b"")
 
+        return self
+
+    def log_metrics(self, logs: dict[str, float], epoch: int, description: str | None = None) -> Self:
+        print(description or f"Epoch {epoch}", self.format_metrics(logs), file=self.get_file(), flush=True)
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:

@@ -44,15 +44,9 @@ class BaseLogger(Logger):
         )
 
     @staticmethod
-    def format_epoch_logs(
-        logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> str:
-        """Make a human-readable string from epoch logs and other information."""
-        return " ".join(
-            [f"Epoch {epoch}" + (f"/{epochs}" if epochs is not None else "")]
-            + ([f"{elapsed:.1f}s"] if elapsed is not None else [])
-            + [f"{k}={v:#.{0 < abs(v) < 2e-4 and '2e' or '4f'}}" for k, v in logs.items()]
-        )
+    def format_metrics(logs: dict[str, float]) -> str:
+        """Make a human-readable string from the logged metrics."""
+        return " ".join([f"{k}={v:#.{0 < abs(v) < 2e-4 and '2e' or '4f'}}" for k, v in logs.items()])
 
     @contextlib.contextmanager
     def graph_in_eval_mode(self, graph: torch.nn.Module):

@@ -41,13 +41,6 @@ class MultiLogger(BaseLogger):
             logger.log_config(config, epoch)
         return self
 
-    def log_epoch(
-        self, logs: dict[str, float], epoch: int, epochs: int | None = None, elapsed: float | None = None,
-    ) -> Self:
-        for logger in self.loggers:
-            logger.log_epoch(logs, epoch, epochs, elapsed)
-        return self
-
     def log_figure(self, label: str, figure: Any, epoch: int, tight_layout: bool = True, close: bool = True) -> Self:
         import matplotlib.pyplot as plt
         for i, logger in enumerate(self.loggers):
@@ -63,6 +56,11 @@ class MultiLogger(BaseLogger):
     def log_image(self, label: str, image: AnyArray, epoch: int, data_format: DataFormat = "HWC") -> Self:
         for logger in self.loggers:
             logger.log_image(label, image, epoch, data_format)
+        return self
+
+    def log_metrics(self, logs: dict[str, float], epoch: int, description: str | None = None) -> Self:
+        for logger in self.loggers:
+            logger.log_metrics(logs, epoch, description)
         return self
 
     def log_text(self, label: str, text: str, epoch: int) -> Self:
