@@ -96,8 +96,8 @@ class Logger(ABC):
 
         Parameters:
           label: The label of the logged image.
-          image: The image to log, represented as an array of any of the
-            following shapes (assuming `"HWC"` data format):
+          image: The image to log, represented as a `PIL` image or as an array
+            of any of the following shapes (assuming `"HWC"` data format):
 
             - `(H, W)` or `(H, W, 1)` for grayscale images,
             - `(H, W, 2)` for grayscale images with alpha channel,
@@ -109,7 +109,8 @@ class Logger(ABC):
             `[0, 255]` range.
           epoch: The epoch number at which the image is logged.
           data_format: The data format of the image specifying whether the channels
-            are stored in the last dimension (`"HWC"`, the default) or in the first dimension (`"CHW"`).
+            are stored in the last dimension (`"HWC"`, the default) or in the first dimension (`"CHW"`);
+            ignored for a `PIL` image.
         """
         ...
 

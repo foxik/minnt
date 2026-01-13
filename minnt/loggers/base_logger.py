@@ -7,6 +7,7 @@ import contextlib
 import json
 from typing import Any, Self
 
+import numpy as np
 import torch
 
 from ..logger import Logger
@@ -81,6 +82,8 @@ class BaseLogger(Logger):
     @staticmethod
     def preprocess_image(image: AnyArray, data_format: DataFormat = "HWC") -> torch.Tensor:
         """Produce a CPU-based [torch.Tensor][] with `dtype=torch.uint8` and shape `(H, W, {1/3/4})`."""
+        if type(image).__module__ == "PIL.Image":
+            image, data_format = np.array(image, copy=True), "HWC"
         image = torch.as_tensor(image, device="cpu")
         image = image.movedim(0, -1) if data_format == "CHW" and image.ndim == 3 else image
         image = (image * 255 if image.dtype.is_floating_point else image).clamp(0, 255).to(torch.uint8)
