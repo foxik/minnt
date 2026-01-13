@@ -331,8 +331,8 @@ class TrainableModule(torch.nn.Module):
     def fit(
         self,
         dataloader: torch.utils.data.DataLoader,
-        *,
         epochs: int,
+        *,
         dev: torch.utils.data.DataLoader | None = None,
         callbacks: list[Callback] = [],
         log_config: dict[str, Any] = {},
