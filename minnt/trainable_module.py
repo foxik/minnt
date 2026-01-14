@@ -625,6 +625,36 @@ class TrainableModule(torch.nn.Module):
         else:
             raise RuntimeError(f"Cannot unpack batch of type {type(y)} into individual items.")
 
+    def predict_batch(self, xs: TensorOrTensors, *, as_numpy: bool = False) -> TensorOrTensors:
+        """Run prediction on a single batch, returning the predicted batch.
+
+        This method is a convenience wrapper around [predict_step][minnt.TrainableModule.predict_step].
+        It sets the module to evaluation mode, move the input to the module device, calls
+        [predict_step][minnt.TrainableModule.predict_step], and optionally converts the output to Numpy arrays.
+
+        None:
+          To customize the prediction, you can override the [predict_step][minnt.TrainableModule.predict_step] method.
+
+        Warning:
+          To avoid calling [torch.nn.Module.eval][] too often, `predict_batch` calls [torch.nn.Module.eval][]
+          only if `self.training` is `True`.
+
+        Parameters:
+          xs: The input batch to the model, either a single tensor or a tensor structure. Note that it
+            cannot be a pair of inputs and outputs.
+          as_numpy: If `False` (the default), the predicted tensors are kept as PyTorch tensors on the module device;
+            if `True`, they are converted to Numpy arrays.
+
+        Returns:
+          predictions: The predicted batch.
+        """
+        assert self.device is not None, "No device has been set for the TrainableModule, run configure first."
+        self.training and self.eval()
+        xs = tensors_to_device_as_tuple(xs, self.device)
+        y = self.predict_step(xs)
+        y = tensors_to_numpy(y) if as_numpy else y
+        return y
+
     def predict_tensor(
         self,
         dataloader: torch.utils.data.DataLoader,

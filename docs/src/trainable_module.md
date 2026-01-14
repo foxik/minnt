@@ -39,6 +39,8 @@ section: API Reference
     options: {show_root_full_path: false, heading_level: 3}
 ::: minnt.TrainableModule.unpack_batch
     options: {show_root_full_path: false, heading_level: 3}
+::: minnt.TrainableModule.predict_batch
+    options: {show_root_full_path: false, heading_level: 3}
 ::: minnt.TrainableModule.predict_tensor
     options: {show_root_full_path: false, heading_level: 3}
 
