@@ -9,6 +9,8 @@ from typing import Any
 
 import torch
 
+from .type_aliases import Logs
+
 
 def broadcast_to_prefix(tensor: torch.Tensor, shape: torch.Size) -> torch.Tensor:
     """Broadcast the given tensor to the given shape from the left (prefix).
@@ -28,6 +30,23 @@ def broadcast_to_prefix(tensor: torch.Tensor, shape: torch.Size) -> torch.Tensor
     if tensor.shape != shape:
         tensor = tensor.expand(shape)
     return tensor
+
+
+def compute_logs(logs: Logs) -> dict[str, float]:
+    """Evaluate the given logs dictionary to floats, calling `compute` where needed.
+
+    Parameters:
+      logs: The logs dictionary which can contain float values, PyTorch and Numpy tensors,
+        or [HasCompute][]-compliant objects providing a `compute` method.
+
+    Returns:
+      logs: The same dictionary as on input, but with all values evaluated to floats.
+    """
+    for k, v in logs.items():
+        if not isinstance(v, float):
+            v = v.compute() if hasattr(v, "compute") else v
+            logs[k] = float(v.item() if hasattr(v, "item") else v)
+    return logs
 
 
 def maybe_remove_one_singleton_dimension(y: torch.Tensor, y_true: torch.Tensor) -> torch.Tensor:

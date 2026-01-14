@@ -60,7 +60,7 @@ from .loss import Loss
 from .metric import Metric
 from .metrics import Mean
 from .type_aliases import Logs, TensorOrTensors
-from .utils import fill_and_standardize_path, tuple_list
+from .utils import compute_logs, fill_and_standardize_path, tuple_list
 
 
 class KeepPrevious:
@@ -121,14 +121,6 @@ class ProgressLogger(tqdm.tqdm):
         description = self._description + f" {elapsed:.1f}s"
         self._console and print(description, BaseLogger.format_metrics(logs), flush=True)
         logger and logger.log_metrics(logs, epoch, description)
-
-
-def compute_logs(logs: Logs) -> dict[str, float]:
-    for k, v in logs.items():
-        if not isinstance(v, float):
-            v = v.compute() if hasattr(v, "compute") else v
-            logs[k] = float(v.item() if hasattr(v, "item") else v)
-    return logs
 
 
 def get_auto_device() -> torch.device:
