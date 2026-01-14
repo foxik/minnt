@@ -416,7 +416,7 @@ class TrainableModule(torch.nn.Module):
             return {**({"lr": self.scheduler.get_last_lr()[0]} if self.scheduler else {}), **self.losses, **metrics}
 
     def compute_loss(
-        self, y_pred: TensorOrTensors, y: TensorOrTensors, *xs: tuple[TensorOrTensors, ...],
+        self, y_pred: TensorOrTensors, y: TensorOrTensors, *xs: TensorOrTensors,
     ) -> torch.Tensor | dict[str, torch.Tensor]:
         """Compute the loss of the model given the inputs, predictions, and target outputs.
 
@@ -432,7 +432,7 @@ class TrainableModule(torch.nn.Module):
         """
         return self.loss(y_pred, y)
 
-    def compute_metrics(self, y_pred: TensorOrTensors, y: TensorOrTensors, *xs: tuple[TensorOrTensors, ...]) -> Logs:
+    def compute_metrics(self, y_pred: TensorOrTensors, y: TensorOrTensors, *xs: TensorOrTensors) -> Logs:
         """Compute and return metrics given the inputs, predictions, and target outputs.
 
         Parameters:
@@ -596,9 +596,7 @@ class TrainableModule(torch.nn.Module):
         with torch.no_grad():
             return self(*xs)
 
-    def unpack_batch(
-        self, y: TensorOrTensors, *xs: tuple[TensorOrTensors, ...],
-    ) -> Iterable[TensorOrTensors]:
+    def unpack_batch(self, y: TensorOrTensors, *xs: TensorOrTensors) -> Iterable[TensorOrTensors]:
         """An overridable method unpacking a batch of predictions into individual items.
 
         The default implementation handles batches of single [torch.Tensor][]s,
