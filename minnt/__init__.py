@@ -16,6 +16,7 @@ from .type_aliases import AnyArray, DataFormat, HasCompute, Logs, Reduction, Ten
 from .vocabulary import Vocabulary
 
 # Utils
+from .progress_logger import ProgressLogger
 from .format_logdir import format_logdir
 from .initializers_override import global_keras_initializers
 from .startup import startup

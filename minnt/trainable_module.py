@@ -42,16 +42,14 @@ a high-level API for training PyTorch models. It is a subclass of
   implementation of the [Logger][minnt.Logger] interface.
 """
 import argparse
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 import functools
 import json
 import os
-import sys
 import time
 from typing import Any, Literal, Self
 
 import torch
-import tqdm
 
 from .callback import Callback, STOP_TRAINING
 from .logger import Logger
@@ -59,6 +57,7 @@ from .loggers import BaseLogger, FileSystemLogger, MultiLogger, TensorBoardLogge
 from .loss import Loss
 from .metric import Metric
 from .metrics import Mean
+from .progress_logger import ProgressLogger as BaseProgressLogger
 from .type_aliases import Logs, TensorOrTensors
 from .utils import compute_logs, fill_and_standardize_path, tuple_list
 
@@ -68,52 +67,10 @@ class KeepPrevious:
 keep_previous = KeepPrevious()  # noqa: E305
 
 
-class ProgressLogger(tqdm.tqdm):
-    """A slim wrapper around [tqdm.tqdm][] for showing a progress bar with logs."""
-
-    monitor_interval = 0  # Disable internal monitoring thread.
-
-    _report_only_first = int(os.environ.get("MINNT_PROGRESS_FIRST", -1))  # Optional global limit to first N reports.
-
-    @staticmethod
-    def current_console_verbosity(console: int | None) -> int:
-        if console is None and "MINNT_PROGRESS" in os.environ:
-            console = int(os.environ["MINNT_PROGRESS"])
-        elif console is None and ("MINNT_PROGRESS_FIRST" in os.environ or "MINNT_PROGRESS_EACH" in os.environ):
-            console = 3 if ProgressLogger._report_only_first != 0 else 1
-        elif console is None:
-            console = 2
-        return console
-
-    def __init__(
-        self, data: Iterable, logs_fn: Callable[[], Logs] | None, console: int | None, description: str | None = None,
-    ) -> None:
-        console = self.current_console_verbosity(console)
-
-        kwargs = {}
-        if "MINNT_PROGRESS_EACH" in os.environ:
-            kwargs["miniters"] = int(os.environ["MINNT_PROGRESS_EACH"])
-            kwargs["mininterval"] = None
-
-        self._console = console
-        self._description = description
-        self._logs_fn = logs_fn
-        super().__init__(data, unit="batch", leave=False, disable=None if console == 2 else console < 2, **kwargs)
-
-    def refresh(self, nolock=False, lock_args=None):
-        if ProgressLogger._report_only_first > 0:
-            ProgressLogger._report_only_first -= 1
-        elif ProgressLogger._report_only_first == 0:
-            return
-        description = self._description
-        if self._logs_fn is not None:
-            description += " " + BaseLogger.format_metrics(compute_logs(self._logs_fn()))
-        self.set_description(description, refresh=False)
-        super().refresh(nolock=nolock, lock_args=lock_args)
-
+class ProgressLogger(BaseProgressLogger):
     @staticmethod
     def log_config(config: dict[str, Any], epoch: int, console: int | None, logger: Logger | None) -> None:
-        if ProgressLogger.current_console_verbosity(console) >= 1:
+        if ProgressLogger.get_console_verbosity(console) >= 1:
             print(BaseLogger.format_config_as_text(config, epoch), flush=True)
         logger and logger.log_config(config, epoch)
 
@@ -371,7 +328,7 @@ class TrainableModule(torch.nn.Module):
             for metric in self.metrics.values():
                 metric.reset()
             start, logs = time.time(), {}
-            data_with_progress = ProgressLogger(dataloader, lambda: logs, console, f"Epoch {self.epoch}/{epochs}")
+            data_with_progress = ProgressLogger(dataloader, f"Epoch {self.epoch}/{epochs}", console, lambda: logs)
             for batch in data_with_progress:
                 xs, y = validate_batch_input_output(batch)
                 xs = tensors_to_device_as_tuple(xs, self.device)
@@ -504,7 +461,7 @@ class TrainableModule(torch.nn.Module):
         for metric in self.metrics.values():
             metric.reset()
         start, logs = time.time(), {}
-        data_with_progress = ProgressLogger(dataloader, lambda: logs, console, "Evaluation")
+        data_with_progress = ProgressLogger(dataloader, "Evaluation", console, lambda: logs)
         for batch in data_with_progress:
             xs, y = validate_batch_input_output(batch)
             xs = tensors_to_device_as_tuple(xs, self.device)
@@ -569,7 +526,7 @@ class TrainableModule(torch.nn.Module):
         """
         assert self.device is not None, "No device has been set for the TrainableModule, run configure first."
         self.eval()
-        for batch in ProgressLogger(dataloader, logs_fn=None, console=console, description="Prediction"):
+        for batch in ProgressLogger(dataloader, "Prediction", console):
             xs = validate_batch_input(batch, with_labels=data_with_labels)
             xs = tensors_to_device_as_tuple(xs, self.device)
             y = self.predict_step(xs)
@@ -799,25 +756,18 @@ class TrainableModule(torch.nn.Module):
     def log_console(
         self, message: str, end: str = "\n", progress_only: bool = False, console: int | None = None,
     ) -> Self:
-        """Write the given message to the console, correctly even if the progress bar is being used.
+        """Write the given message to the console, correctly even if a progress bar is being used.
 
         Parameters:
           message: The message to write.
           end: The string appended after the message.
-          progress_only: If `False`, the message is written to standard output when current console verbosity
-            is at least 1; if `True`, the message is written to standard error only when the progress bar is
-            being shown (console verbosity 2 and writing to the console, or console verbosity 3).
+          progress_only: If `False` (the default), the message is written to standard output when current console
+            verbosity is at least 1; if `True`, the message is written to standard error only when the progress bar
+            is being shown (console verbosity 2 and writing to the console, or console verbosity 3).
           console: Controls the current console verbosity. The default is 2, but can be overridden by the
             `MINNT_PROGRESS` environment variable.
-
-        Returns:
-          self
         """
-        console = ProgressLogger.get_console_verbosity(console)
-        if progress_only and ((console == 2 and sys.stderr.isatty()) or console >= 3):
-            tqdm.tqdm.write(message, end=end, file=sys.stderr)
-        elif (not progress_only) and console >= 1:
-            tqdm.tqdm.write(message, end=end, file=sys.stdout)
+        ProgressLogger.log_console(message, end, progress_only, console)
         return self
 
     def get_tb_writer(self, name: str) -> torch.utils.tensorboard.SummaryWriter:

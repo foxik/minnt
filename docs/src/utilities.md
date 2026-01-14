@@ -13,4 +13,6 @@ parameter initialization override, logdir formatting, and the current version.
     options:
       heading: minnt.format_logdir
 
+::: minnt.ProgressLogger
+
 ::: minnt.__version__
