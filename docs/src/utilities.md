@@ -1,7 +1,8 @@
 # Utilities
 
-Minnt framework also provides a few utilities for startup initialization,
-parameter initialization override, logdir formatting, and the current version.
+Minnt framework provides a few utilities for startup initialization,
+parameter initialization override, logdir formatting, tensor manipulation,
+logging, and versioning.
 
 ## **Startup** { data-toc-label="<b>Startup</b>" }
 ::: minnt.startup
