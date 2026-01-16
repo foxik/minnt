@@ -116,7 +116,18 @@ def tensors_concatenate(x: list[TensorOrTensors] | tuple[TensorOrTensors, ...]) 
 
 
 def tensors_to_device(x: TensorOrTensors, device: torch.device) -> TensorOrTensors:
-    """Asynchronously move input tensor data structure to a given device."""
+    """Asynchronously move the input tensor or the input tensor structure to the given device.
+
+    Parameters:
+      x: The input tensor or tensor structure to move to the device, where tensor structures
+        can be tuples, lists, or dictionaries containing other tensor structures and non-tensor
+        values, or completely custom data structures. All tensors in tuples, lists, and dictionary
+        values are moved.
+      device: The device to move the tensors to.
+
+    Returns:
+      The input tensor or tensor structure with all tensors moved to the given device.
+    """
     if isinstance(x, (torch.Tensor, torch.nn.utils.rnn.PackedSequence)):
         return x.to(device, non_blocking=True)
     elif isinstance(x, tuple):

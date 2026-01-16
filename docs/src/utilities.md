@@ -11,6 +11,9 @@ parameter initialization override, logdir formatting, and the current version.
 ## **Formatting** { data-toc-label="<b>Formatting</b>" }
 ::: minnt.format_logdir
 
+## **Tensor Manipulation** { data-toc-label="<b>Tensor Manipulation</b>" }
+::: minnt.tensors_to_device
+
 ## **Logging** { data-toc-label="<b>Logging</b>" }
 ::: minnt.ProgressLogger
 

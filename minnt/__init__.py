@@ -20,6 +20,7 @@ from .progress_logger import ProgressLogger
 from .format_logdir_impl import format_logdir
 from .initializers_override import global_keras_initializers
 from .startup_impl import startup
+from .trainable_module import tensors_to_device
 from .version import __version__
 
 # Callbacks
