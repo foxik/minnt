@@ -1,0 +1,13 @@
+{
+    "name": "Minnt-0.0",
+    "package": "minnt",
+    "index": "index.html",
+    "externalURL": "https://minnt.org",
+    "selectors": {
+        "span.doc-class-name span": "Class",
+        "span.doc-function-name span": "Method",
+        "span.doc-attribute-name span": "Attribute"
+    },
+    "ignore": [],
+    "allowJS": true
+}
