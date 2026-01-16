@@ -17,9 +17,9 @@ from .vocabulary import Vocabulary
 
 # Utils
 from .progress_logger import ProgressLogger
-from .format_logdir import format_logdir
+from .format_logdir_impl import format_logdir
 from .initializers_override import global_keras_initializers
-from .startup import startup
+from .startup_impl import startup
 from .version import __version__
 
 # Callbacks
