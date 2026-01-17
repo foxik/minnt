@@ -20,3 +20,4 @@ logging, and versioning.
 
 ## **Versioning** { data-toc-label="<b>Versioning</b>" }
 ::: minnt.__version__
+::: minnt.require_version

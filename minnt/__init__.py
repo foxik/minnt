@@ -21,7 +21,7 @@ from .initializers_override import global_keras_initializers
 from .progress_logger import ProgressLogger
 from .startup_impl import startup
 from .trainable_module import tensors_to_device
-from .version import __version__
+from .version import require_version, __version__
 
 # Callbacks
 from .callback import Callback, STOP_TRAINING
