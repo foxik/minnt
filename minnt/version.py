@@ -5,3 +5,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 __version__ = "0.0.6-alpha"
+"""The current version of the Minnt package, formatted according to [Semantic Versioning](https://semver.org/).
+
+The version string is in the format _major.minor.patch[-prerelease]_, where the _prerelease_ part is
+optional and is empty for stable releases.
+"""
