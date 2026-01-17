@@ -4,7 +4,7 @@ title: Minnt
 
 <div style="float: right; width: 40%; text-align: center"><img src="images/leaf-green-noborder.svg" style="height: 11em"></div>
 
-# Minnt
+# Minnt 0.0.6-alpha
 
 **Minnt** is <s style="color: #777">**Mi**lan's</s> **Mi**nimalistic **N**eural **N**etwork
 **T**rainer for PyTorch inspired by Keras.
@@ -35,12 +35,3 @@ can also be used directly.
 Finally, several [utilities](utilities.md) are provided, including
 a [Vocabulary](vocabulary.md) class for converting between strings and their
 indices.
-
-::: minnt.__version__
-    options:
-      heading: "The Minnt version"
-      heading_level: 2
-      toc_label: "Version"
-      show_labels: false
-      show_symbol_type_toc: false
-      show_symbol_type_heading: false
