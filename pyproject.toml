@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "minnt"
-version = "0.0.6-alpha"
+version = "1.0.0-alpha0"
 authors = [
   { name="Milan Straka", email="milan@strakovi.com" },
 ]

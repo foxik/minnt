@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-__version__ = "0.0.6-alpha"
+__version__ = "1.0.0-alpha0"
 """The current version of the Minnt package, formatted according to [Semantic Versioning](https://semver.org/).
 
 The version string is in the format _major.minor.patch[-prerelease]_, where the _prerelease_ part is
