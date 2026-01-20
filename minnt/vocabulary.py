@@ -7,34 +7,73 @@ from collections.abc import Iterable
 
 
 class Vocabulary:
-    """ A class for managing mapping between strings and indices.
+    """A class for managing mapping between strings and indices.
 
-    The vocabulary is initialized with a list of strings.
+    The vocabulary is initialized with a list of strings, and additionally can contain
+    two special tokens:
 
-    It always contains a special padding token [Vocabulary.PAD][minnt.Vocabulary.PAD]
-    at index 0, and optionally an unknown token [Vocabulary.UNK][minnt.Vocabulary.UNK]
-    at index 1 (when [Vocabulary.has_unk][minnt.Vocabulary.has_unk]).
+    - a padding token [minnt.Vocabulary.PAD_TOKEN][], which, if present, is always at index
+      [minnt.Vocabulary.PAD][]=0;
+    - an unknown token [minnt.Vocabulary.UNK_TOKEN][], which, if present, is either at index
+      [minnt.Vocabulary.UNK][] 0 or 1 (depending on whether the padding token is present);
+      the index of this token is returned when looking up a string not present in the vocabulary.
     """
-    PAD: int = 0
-    """The index of the padding token."""
-    UNK: int = 1
-    """The index of the unknown token, which might not be present."""
+    PAD: int | None
+    """The index of the padding token, either `None` or `0`."""
+    PAD_TOKEN: str = "[PAD]"
+    """The string representing the padding token."""
 
-    def __init__(self, strings: Iterable[str], add_unk: bool = False) -> None:
+    UNK: int | None
+    """The index of the unknown token, either `None`, `0`, or `1`."""
+    UNK_TOKEN: str = "[UNK]"
+    """The string representing the unknown token."""
+
+    def __init__(self, strings: Iterable[str], add_pad: bool = False, add_unk: bool = False) -> None:
         """Initialize the vocabulary with the given list of strings.
 
-        The [Vocabulary.PAD][minnt.Vocabulary.PAD] is always the first token in the vocabulary;
-        [Vocabulary.UNK][minnt.Vocabulary.UNK] is the second token but only when `add_unk=True`.
-        """
-        self._strings = ["[PAD]"] + (["[UNK]"] if add_unk else [])
-        self._strings.extend(strings)
-        self._string_map = {string: index for index, string in enumerate(self._strings)}
-        self._has_unk = add_unk
+        The strings might be prepended with special tokens for padding and unknown tokens, respectively,
+        depending on the values of `add_pad` and `add_unk`.
 
-    @property
-    def has_unk(self) -> bool:
-        """A boolean property indicating whether the vocabulary was constructed with an UNK token."""
-        return self._has_unk
+        Note:
+          If the given strings already contain special tokens on expected indices, they are recognized
+          correctly and no duplicates are added even if `add_pad` and/or `add_unk` are `True`.
+
+        Parameters:
+          strings: An iterable of strings to include in the vocabulary.
+          add_pad: Whether to add a padding token [minnt.Vocabulary.PAD_TOKEN][] at index 0
+            and set [minnt.Vocabulary.PAD][]=0.
+          add_unk: Whether to add an unknown token [minnt.Vocabulary.UNK_TOKEN][] at index 0 or 1
+            (depending on whether the padding token is added) and set [minnt.Vocabulary.UNK][] accordingly.
+        """
+        # Get the first two strings (if any) to check for special tokens.
+        it, head = iter(strings), []
+        try:
+            head.append(next(it))
+            head.append(next(it))
+        except StopIteration:
+            it = None
+
+        # Start by adding the special tokens.
+        self._strings = []
+
+        if add_pad or (head and head[0] == self.PAD_TOKEN):  # Add PAD token if required or present.
+            self.PAD = 0
+            self._strings.append(self.PAD_TOKEN)
+            (head and head[0] == self.PAD_TOKEN) and head.pop(0)
+        else:
+            self.PAD = None
+
+        if add_unk or (head and head[0] == self.UNK_TOKEN):  # Add UNK token if required or present.
+            self.UNK = len(self._strings)
+            (head and head[0] == self.UNK_TOKEN) or self._strings.append(self.UNK_TOKEN)
+        else:
+            self.UNK = None
+
+        # Now add the remaining strings, both from `head` and from `it`.
+        self._strings.extend(head)
+        it is not None and self._strings.extend(it)
+
+        self._string_map = {string: index for index, string in enumerate(self._strings)}
 
     def __len__(self) -> int:
         """The number of strings in the vocabulary.
@@ -51,6 +90,22 @@ class Vocabulary:
           An iterator over strings in the vocabulary.
         """
         return iter(self._strings)
+
+    def add(self, string: str) -> int:
+        """If not already present, add the given string to the end of the vocabulary.
+
+        Parameters:
+          string: The string to add.
+
+        Returns:
+          The index of the newly added string (or the index of the existing string if it was already present).
+        """
+        index = self._string_map.get(string)
+        if index is None:
+            index = len(self._strings)
+            self._strings.append(string)
+            self._string_map[string] = index
+        return index
 
     def string(self, index: int) -> str:
         """Convert vocabulary index to string.
@@ -74,30 +129,40 @@ class Vocabulary:
         """
         return [self._strings[index] for index in indices]
 
-    def index(self, string: str) -> int | None:
+    def index(self, string: str, add_missing: bool = False) -> int | None:
         """Convert string to vocabulary index.
 
         Parameters:
           string: The string to convert.
+          add_missing: Whether to add the string to the vocabulary if not present.
 
         Returns:
           The index corresponding to the given string. If the string is not found in the vocabulary, then
 
-            - if the vocabulary was constructed with an UNK token, it returns [Vocabulary.UNK][minnt.Vocabulary.UNK];
-            - otherwise, it returns `None`.
+            - if `add_missing` is `True`, the string is added to the end of the vocabulary and its index returned;
+            - if the [minnt.Vocabulary.UNK_TOKEN][] was added to the vocabulary, its index is returned;
+            - otherwise, `None` is returned.
         """
-        return self._string_map.get(string, self.UNK if self._has_unk else None)
+        if add_missing:
+            return self.add(string)
+        else:
+            return self._string_map.get(string, self.UNK)
 
-    def indices(self, strings: Iterable[str]) -> list[int | None]:
+    def indices(self, strings: Iterable[str], add_missing: bool = False) -> list[int | None]:
         """Convert a sequence of strings to vocabulary indices.
 
         Parameters:
           strings: An iterable of strings to convert.
+            add_missing: Whether to add strings not present in the vocabulary.
 
         Returns:
-          A list of indices corresponding to the given strings. For each string not found in the vocabulary, it returns
+          A list of indices corresponding to the given strings. For each string not found in the vocabulary:
 
-            - [Vocabulary.UNK][minnt.Vocabulary.UNK] if the vocabulary was constructed with an UNK token;
-            - otherwise, it returns `None`.
+            - if `add_missing` is `True`, the string is added to the end of the vocabulary and its index returned;
+            - if the [minnt.Vocabulary.UNK_TOKEN][] was added to the vocabulary, its index is returned;
+            - otherwise, `None` is returned.
         """
-        return [self._string_map.get(string, self.UNK if self._has_unk else None) for string in strings]
+        if add_missing:
+            return [self.add(string) for string in strings]
+        else:
+            return [self._string_map.get(string, self.UNK) for string in strings]
