@@ -17,6 +17,10 @@ class Vocabulary:
     - an unknown token [minnt.Vocabulary.UNK_TOKEN][], which, if present, is either at index
       [minnt.Vocabulary.UNK][] 0 or 1 (depending on whether the padding token is present);
       the index of this token is returned when looking up a string not present in the vocabulary.
+
+    Info:
+      A `Vocabulary` instance can be pickled and unpickled efficiently as a list of strings;
+      the required string-to-index mapping is reconstructed upon unpickling.
     """
     PAD: int | None
     """The index of the padding token, either `None` or `0`."""
@@ -90,6 +94,15 @@ class Vocabulary:
           An iterator over strings in the vocabulary.
         """
         return iter(self._strings)
+
+    def __getstate__(self) -> dict:
+        state = self.__dict__.copy()
+        del state["_string_map"]
+        return state
+
+    def __setstate__(self, state: dict) -> None:
+        self.__dict__.update(state)
+        self._string_map = {string: index for index, string in enumerate(self._strings)}
 
     def add(self, string: str) -> int:
         """If not already present, add the given string to the end of the vocabulary.
