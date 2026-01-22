@@ -45,6 +45,7 @@ nav:
   - schedulers/cosine_decay.md
   - schedulers/generic_decay.md
   - schedulers/linear_decay.md
+  - schedulers/no_decay.md
 plugins:
 - mkdocstrings:
     default_handler: python

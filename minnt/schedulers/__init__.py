@@ -6,3 +6,4 @@
 from .cosine_decay import CosineDecay
 from .generic_decay import GenericDecay
 from .linear_decay import LinearDecay
+from .no_decay import NoDecay
