@@ -213,7 +213,6 @@ using the W&B logger [minnt.loggers.WandBLogger][] saving the logs to `logs/wand
     --8<-- "examples/1h_wandb.py"
     ```
 
-
 ## Profiling CPU & GPU
 
 A [minnt.TrainableModule][] can be profiled by using the [minnt.TrainableModule.profile][] method.
@@ -237,4 +236,3 @@ you can try enabling it if you have it installed.
     ```python linenums="1"
     --8<-- "examples/1i_profiling.py"
     ```
-
