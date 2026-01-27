@@ -17,8 +17,10 @@ See the [Examples](examples.md). Install using:
 
 The central class in Minnt is the [TrainableModule](trainable_module.md) providing:
 
-- high-level training, evaluation, and prediction API, including automatic device management;
-- serialization and deserialization of weights (optionally including the optimizer) and module options;
+- high-level [training][minnt.TrainableModule.fit], [evaluation][minnt.TrainableModule.evaluate],
+  and [prediction][minnt.TrainableModule.predict] API, including automatic device management;
+- [serialization][minnt.TrainableModule.save_weights] and [deserialization][minnt.TrainableModule.load_weights]
+  of weights (optionally including the optimizer) and module [options][minnt.TrainableModule.save_options].
 - easy to use multi-GPU single-node training (planned, not yet implemented),
 - automatic logging via various [loggers](logger.md),
 - easy profiling support (planned, not yet implemented).
