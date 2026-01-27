@@ -212,3 +212,29 @@ using the W&B logger [minnt.loggers.WandBLogger][] saving the logs to `logs/wand
     ```python linenums="1"
     --8<-- "examples/1h_wandb.py"
     ```
+
+
+## Profiling CPU & GPU
+
+A [minnt.TrainableModule][] can be profiled by using the [minnt.TrainableModule.profile][] method.
+The profiler tracks CPU usage, accelerator usage (if available), and memory usage, and the resulting
+trace file can be inspected in TensorBoard using the `torch-tb-profiler` plugin (which can be installed
+using `pip install torch-tb-profiler`). Given number of steps (forward calls) are profiled (either
+during training or evaluation), after optional number of warmup steps.
+
+The example below profiles 2 steps after a warmup of 3 steps. Note that we disable graph logging to avoid
+profiling the corresponding graph tracing; we could have also used larger warmup (e.g., `warmup=5`)
+to achieve a similar effect.
+
+A memory timeline is not generated in the example because it requires the Matplotlib package;
+you can try enabling it if you have it installed.
+
+=== "Diff vs 1_minnt.py"
+    ```sh exec="on" result="diff"
+    scripts/example_diff 1i_profiling.py 1_minnt.py
+    ```
+=== "1i_profiling.py"
+    ```python linenums="1"
+    --8<-- "examples/1i_profiling.py"
+    ```
+

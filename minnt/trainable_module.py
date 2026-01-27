@@ -46,6 +46,7 @@ from collections.abc import Iterable
 import functools
 import json
 import os
+import sys
 import time
 from typing import Any, Literal, Self
 
@@ -763,6 +764,109 @@ class TrainableModule(torch.nn.Module):
             options = json.load(options_file)
         return dict((k.removesuffix(": argparse.Namespace"), argparse.Namespace(**v))
                     if k.endswith(": argparse.Namespace") else (k, v) for k, v in options.items())
+
+    def profile(
+        self,
+        steps: int,
+        export_trace: str | None = None,
+        *,
+        warmup: int | None = 0,
+        export_memory_timeline: str | bool = False,
+        export_cuda_allocations: str | bool = False,
+        quit_when_done: bool = False,
+    ) -> None:
+        """Profile the module execution for a number of steps.
+
+        Run the PyTorch profiler on a CPU and an accelerator if available (and optionally track CUDA allocations),
+        for the given number of steps (forward passes) after an optional number of warmup steps.
+
+        Info:
+          The exported profile trace can be inspected in TensorBoard using the `torch-tb-profiler` plugin that
+          can be installed using `pip install torch-tb-profiler`.
+
+        Info:
+          The CUDA memory allocations snapshot can be inspected using the <https://docs.pytorch.org/memory_viz> page.
+
+        Parameters:
+          steps: The number of steps (forward calls) to profile. For example, when `steps=2`, the profiler starts
+            at the beginning of the first step (forward) and stops at the beginning of the third step (forward).
+          export_trace: An optional path to export the main profile to (as a Chrome trace JSON file). The file must
+            have an extension of either `.pt.trace.json` or `.pt.trace.json.gz` to be recognized by the
+            `torch-tb-profiler` plugin; if the path does not end with one of those extensions, `.pt.trace.json.gz`
+            is appended.
+          warmup: An optional number of warmup steps to skip before starting the profiling.
+
+            - When 0 (the default), profiling starts at the beginning of the first step (forward call).
+            - When 1, profiling starts at the beginning of the second step (forward call).
+            - When `None`, the profiling starts immediately (which can be useful to track CUDA allocations
+              during module initialization).
+          export_memory_timeline: An optional path to export the memory timeline HTML report to. If a string is
+            passed, it is used as the path (appending `.html` if needed); if `True` is passed, the path is derived
+            from `export_trace` by replacing the extension with `.html`.
+
+            **Note**: Requires the `matplotlib` package for generating the graph.
+          export_cuda_allocations: An optional path to export the CUDA memory allocations snapshot to (when CUDA
+            is available). If a string is passed, it is used as the path (appending `.pickle` if needed);
+            if `True` is passed, the path is derived from `export_trace` by replacing the extension with `.pickle`.
+          quit_when_done: If `True`, the program exits when profiling is done.
+        """
+        # Standardize all export paths.
+        if export_trace is not None:
+            if not export_trace.endswith(".pt.trace.json") and not export_trace.endswith(".pt.trace.json.gz"):
+                export_trace += ".pt.trace.json.gz"
+            export_trace = fill_and_standardize_path(export_trace, logdir=self.logdir)
+
+        if isinstance(export_memory_timeline, str):
+            if not export_memory_timeline.endswith(".html"):
+                export_memory_timeline += ".html"
+            export_memory_timeline = fill_and_standardize_path(export_memory_timeline, logdir=self.logdir)
+        elif export_memory_timeline is True:
+            assert export_trace is not None, "export_trace must be specified when export_memory_timeline is True."
+            export_memory_timeline = export_trace.rsplit(".pt.trace.json", maxsplit=1)[0] + ".html"
+
+        if isinstance(export_cuda_allocations, str):
+            if not export_cuda_allocations.endswith(".pickle"):
+                export_cuda_allocations += ".pickle"
+            export_cuda_allocations = fill_and_standardize_path(export_cuda_allocations, logdir=self.logdir)
+        elif export_cuda_allocations is True:
+            assert export_trace is not None, "export_trace must be specified when export_cuda_allocations is True."
+            export_cuda_allocations = export_trace.rsplit(".pt.trace.json", maxsplit=1)[0] + ".pickle"
+
+        # Set up the profiler hook.
+        profiler, hook = None, None
+
+        def profile_step(_module, _inputs) -> None:
+            nonlocal steps, warmup, profiler
+            if warmup > 0:
+                warmup -= 1
+            elif steps > 0:
+                if profiler is None:
+                    if export_cuda_allocations and torch.cuda.is_available():
+                        torch.cuda.memory._record_memory_history()
+                    profiler = torch.profiler.profile(profile_memory=True, record_shapes=True, with_stack=True)
+                    profiler.__enter__()
+                steps -= 1
+            elif profiler is not None:
+                profiler.__exit__(None, None, None)
+                if export_cuda_allocations and torch.cuda.is_available():
+                    torch.cuda.memory._dump_snapshot(export_cuda_allocations)
+                    torch.cuda.memory._record_memory_history(enabled=None)
+                if export_trace:
+                    profiler.export_chrome_trace(export_trace)
+                if export_memory_timeline:
+                    profiler.export_memory_timeline(export_memory_timeline)
+                hook.remove()
+                profiler = None
+                quit_when_done and sys.exit(0)
+
+        # Register the profiler hook.
+        hook = self.register_forward_pre_hook(profile_step)
+
+        # When warmup is `None`, start profiling immediately.
+        if warmup is None:
+            warmup = 0
+            steps += 1
+            profile_step(None, None)
 
     def log_console(
         self, message: str, end: str = "\n", progress_only: bool = False, console: int | None = None,

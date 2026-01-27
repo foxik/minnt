@@ -54,6 +54,10 @@ section: API Reference
 ::: minnt.TrainableModule.load_options
     options: {show_root_full_path: false, heading_level: 3}
 
+### **Profiling** { data-toc-label="<b>Profiling Support</b>" }
+::: minnt.TrainableModule.profile
+    options: {show_root_full_path: false, heading_level: 3}
+
 ### **Logging Utilities** { data-toc-label="<b>Logging Utilities</b>" }
 ::: minnt.TrainableModule.log_console
     options: {show_root_full_path: false, heading_level: 3}
