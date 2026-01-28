@@ -1,6 +1,6 @@
 site_name: Minnt Framework
 site_url: https://minnt.org/
-repo_url: https://github.com/foxik/minnt
+repo_url: https://github.com/ufal/minnt
 docs_dir: src
 watch: [../minnt, ../examples]
 nav:
