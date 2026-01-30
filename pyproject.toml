@@ -38,5 +38,5 @@ torch = [
 Homepage = "https://minnt.org"
 Repository = "https://github.com/ufal/minnt"
 
-[tool.setuptools]
-packages = ["minnt"]
+[tool.setuptools.packages.find]
+include = ["minnt*"]
