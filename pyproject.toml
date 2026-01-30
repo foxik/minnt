@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Minimalistic Neural Network Trainer"
 readme = "README.md"
-license = "mpl-2.0"
+license = "MPL-2.0"
 license-files = ["LICENSE"]
 classifiers = [
     "Development Status :: 4 - Beta",
