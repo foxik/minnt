@@ -11,7 +11,6 @@ import minnt
 parser = argparse.ArgumentParser()
 parser.add_argument("--fs_logger", default=False, action="store_true", help="Use FileSystemLogger.")
 parser.add_argument("--hidden_layer_size", default=100, type=int, help="Size of the hidden layer.")
-parser.add_argument("--logger", default="FileSystemLogger", help="Logger to use.")
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 parser.add_argument("--tb_logger", default=False, action="store_true", help="Use TensorBoardLogger.")
 parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
