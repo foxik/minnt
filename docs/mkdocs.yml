@@ -6,6 +6,7 @@ watch: [../minnt, ../examples]
 nav:
 - index.md
 - examples.md
+- changelog.md
 - trainable_module.md
 - transformed_dataset.md
 - type_aliases.md
