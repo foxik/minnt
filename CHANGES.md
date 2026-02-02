@@ -1,3 +1,7 @@
+Version 1.0.3-dev
+-----------------
+
+
 Version 1.0.2 [02 Feb 2026]
 ---------------------------
 - Support lightweight profiling mode with reduced overhead collecting only basic
