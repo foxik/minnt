@@ -1,5 +1,7 @@
 Version 1.0.2-dev
 -----------------
+- Support lightweight profiling mode with reduced overhead collecting only basic
+  information.
 - In PyTorch 2.10, allocator settings are set via a new generic interface, not via
   the original CUDA-specific interface (which now generates a deprecation warning).
   Therefore, start using the generic allocator settings interface when available.

@@ -771,6 +771,7 @@ class TrainableModule(torch.nn.Module):
         export_trace: str | None = None,
         *,
         warmup: int | None = 0,
+        lightweight: bool = False,
         export_memory_timeline: str | bool = False,
         export_cuda_allocations: str | bool = False,
         quit_when_done: bool = False,
@@ -779,6 +780,9 @@ class TrainableModule(torch.nn.Module):
 
         Run the PyTorch profiler on a CPU and an accelerator if available (and optionally track CUDA allocations),
         for the given number of steps (forward passes) after an optional number of warmup steps.
+
+        By default, the profiler records detailed information including shapes, stack traces, and memory utilization,
+        which has additional overhead. When `lightweight=True`, only basic information is recorded.
 
         Info:
           The exported profile trace can be inspected in TensorBoard using the `torch-tb-profiler` plugin that
@@ -800,6 +804,8 @@ class TrainableModule(torch.nn.Module):
             - When 1, profiling starts at the beginning of the second step (forward call).
             - When `None`, the profiling starts immediately (which can be useful to track CUDA allocations
               during module initialization).
+          lightweight: If `True`, use a lightweight profiling mode that records only basic information, excluding
+            tensor shapes, stack traces, and memory utilization. This reduces the profiling overhead.
           export_memory_timeline: An optional path to export the memory timeline HTML report to. If a string is
             passed, it is used as the path (appending `.html` if needed); if `True` is passed, the path is derived
             from `export_trace` by replacing the extension with `.html`.
@@ -810,6 +816,9 @@ class TrainableModule(torch.nn.Module):
             if `True` is passed, the path is derived from `export_trace` by replacing the extension with `.pickle`.
           quit_when_done: If `True`, the program exits when profiling is done.
         """
+        if lightweight and export_memory_timeline is not False:
+            raise ValueError("The export_memory_timeline argument cannot be used with lightweight=True.")
+
         # Standardize all export paths.
         if export_trace is not None:
             if not export_trace.endswith(".pt.trace.json") and not export_trace.endswith(".pt.trace.json.gz"):
@@ -845,7 +854,8 @@ class TrainableModule(torch.nn.Module):
                         torch.cuda.memory._record_memory_history()
                     # We use `acc_events=True` to avoid false-positive warning in PyTorch 2.10 about acc_events.
                     profiler = torch.profiler.profile(
-                        profile_memory=True, record_shapes=True, with_stack=True, acc_events=True)
+                        profile_memory=not lightweight, record_shapes=not lightweight, with_stack=not lightweight,
+                        acc_events=True)
                     profiler.__enter__()
                 steps -= 1
             elif profiler is not None:
