@@ -1,5 +1,5 @@
-Version 1.0.2-dev
------------------
+Version 1.0.2 [02 Feb 2026]
+---------------------------
 - Support lightweight profiling mode with reduced overhead collecting only basic
   information.
 - In PyTorch 2.10, allocator settings are set via a new generic interface, not via
