@@ -843,7 +843,9 @@ class TrainableModule(torch.nn.Module):
                 if profiler is None:
                     if export_cuda_allocations and torch.cuda.is_available():
                         torch.cuda.memory._record_memory_history()
-                    profiler = torch.profiler.profile(profile_memory=True, record_shapes=True, with_stack=True)
+                    # We use `acc_events=True` to avoid false-positive warning in PyTorch 2.10 about acc_events.
+                    profiler = torch.profiler.profile(
+                        profile_memory=True, record_shapes=True, with_stack=True, acc_events=True)
                     profiler.__enter__()
                 steps -= 1
             elif profiler is not None:
