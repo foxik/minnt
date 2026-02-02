@@ -108,10 +108,10 @@ def main(args: argparse.Namespace) -> None:
         for epoch in range(1, 10 + 1):
             for dataset in ["train", "dev"] + (["test"] if epoch == 10 else []):
                 offset = 0.05 if dataset == "dev" else 0.1 if dataset == "test" else 0.0
-                logger.log_epoch({
+                logger.log_metrics({
                     f"{dataset}:accuracy": 0.45 + min(epoch, 4 + epoch % 2) / 10 - offset,
                     f"{dataset}:loss": 2 / epoch + offset,
-                }, epoch, epochs=10, elapsed=4.2)
+                }, epoch, f"Epoch {epoch}/10 4.2s")
 
             logger.log_text("response", f"A sample log message in epoch {epoch}.", epoch)
 
