@@ -1,5 +1,5 @@
-Version 1.0.3-dev
------------------
+Version 1.0.3 [21 Feb 2026]
+---------------------------
 - Require `setuptools < 80.9` as a temporal workaround for removed
   `pkg_resources` in `setuptools == 82.0`.
 - Improve typing (`Metric` is now just a protocol, together with `Loss` they are
