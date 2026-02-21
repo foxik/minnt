@@ -1,5 +1,7 @@
 Version 1.0.3-dev
 -----------------
+- Require `setuptools < 80.9` as a temporal workaround for removed
+  `pkg_resources` in `setuptools == 82.0`.
 
 
 Version 1.0.2 [02 Feb 2026]

@@ -25,6 +25,7 @@ requires-python = ">= 3.11"
 dependencies = [
   # TensorBoard for inspecting logs
   "tensorboard >= 2.20.0",
+  "setuptools < 80.9",  # ==82 removes pkg_resources; <80.9 does not warn about deprecation
   # tqdm for progress bars
   "tqdm >= 4.66.0",
 ]
