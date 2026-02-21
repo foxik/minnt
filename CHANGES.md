@@ -1,3 +1,7 @@
+Version 1.0.4-dev
+-----------------
+
+
 Version 1.0.3 [21 Feb 2026]
 ---------------------------
 - Require `setuptools < 80.9` as a temporal workaround for removed
