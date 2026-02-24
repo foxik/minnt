@@ -1,3 +1,7 @@
+Version 1.0.5-dev
+-----------------
+
+
 Version 1.0.4 [24 Feb 2026]
 ---------------------------
 - Improve `format_logdir` to correctly handle environments without `__file__`

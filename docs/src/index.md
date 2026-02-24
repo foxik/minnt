@@ -4,7 +4,7 @@ title: Minnt
 
 <div style="float: right; width: 40%; text-align: center"><img src="images/leaf-green-noborder.svg" style="height: 11em"></div>
 
-# Minnt 1.0.4
+# Minnt 1.0.5-dev
 
 **Minnt** is <s style="color: #777">**Mi**lan's</s> **Mi**nimalistic **N**eural **N**etwork
 **T**rainer for PyTorch inspired by Keras.
