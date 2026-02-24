@@ -1,5 +1,7 @@
 Version 1.0.4-dev
 -----------------
+- Improve `format_logdir` to correctly handle environments without `__file__`
+  and calls with no kwargs.
 
 
 Version 1.0.3 [21 Feb 2026]
