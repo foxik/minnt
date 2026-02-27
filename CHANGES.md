@@ -1,6 +1,8 @@
 Version 1.0.5-dev
 -----------------
 - Fix a crash in `TrainableModule.get_tb_writer` by using a correct method name.
+- Fix producing logs more frequently than `MINNT_REPORT_EACH` when more then
+  10 seconds have elapsed between updates.
 
 
 Version 1.0.4 [24 Feb 2026]
