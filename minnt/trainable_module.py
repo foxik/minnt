@@ -576,11 +576,11 @@ class TrainableModule(torch.nn.Module):
         elif isinstance(y, torch.nn.utils.rnn.PackedSequence):
             yield from torch.nn.utils.rnn.unpack_sequence(y)
         elif isinstance(y, tuple):
-            yield from zip(*(self.predicted_batch_as_items(b) for b in y))
+            yield from zip(*(self.unpack_batch(b) for b in y))
         elif isinstance(y, list):
-            yield from map(list, zip(*(self.predicted_batch_as_items(b) for b in y)))
+            yield from map(list, zip(*(self.unpack_batch(b) for b in y)))
         elif isinstance(y, dict):
-            for items in zip(*(self.predicted_batch_as_items(v) for v in y.values())):
+            for items in zip(*(self.unpack_batch(v) for v in y.values())):
                 yield dict(zip(y.keys(), items))
         else:
             raise RuntimeError(f"Cannot unpack batch of type {type(y)} into individual items.")
