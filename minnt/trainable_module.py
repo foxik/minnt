@@ -592,8 +592,8 @@ class TrainableModule(torch.nn.Module):
         It sets the module to evaluation mode, move the input to the module device, calls
         [predict_step][minnt.TrainableModule.predict_step], and optionally converts the output to Numpy arrays.
 
-        None:
-          To customize the prediction, you can override the [predict_step][minnt.TrainableModule.predict_step] method.
+        Note:
+          To customize prediction, you can override the [predict_step][minnt.TrainableModule.predict_step] method.
 
         Warning:
           To avoid calling [torch.nn.Module.eval][] too often, `predict_batch` calls [torch.nn.Module.eval][]
@@ -627,8 +627,8 @@ class TrainableModule(torch.nn.Module):
 
         This method is a convenience wrapper around [predict][minnt.TrainableModule.predict].
 
-        None:
-          To customize the prediction, you can override the [predict_step][minnt.TrainableModule.predict_step] method.
+        Note:
+          To customize prediction, you can override the [predict_step][minnt.TrainableModule.predict_step] method.
 
         Parameters:
           dataloader: The dataset to predict on, each element either directly the module
