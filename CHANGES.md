@@ -5,6 +5,7 @@ Version 1.0.5-dev
   10 seconds have elapsed between updates.
 - Fix incorrect recursive calls in `unpack_batch`.
 - The `WandBLogger.log_graph` method no longer tries to log the graph to WandB.
+- Add `sort_keys` option to `Logger.log_config` method.
 
 
 Version 1.0.4 [24 Feb 2026]

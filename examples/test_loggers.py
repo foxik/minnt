@@ -74,13 +74,15 @@ def main(args: argparse.Namespace) -> None:
         elif logger_name == "tb":
             logger = minnt.loggers.TensorBoardLogger(logdir)
         elif logger_name == "wandb":
-            logger = minnt.loggers.WandbLogger(project=args.wandb_logger, dir=logdir)
-
-        # Configuration
-        logger.log_config(vars(args), 0)
+            logger = minnt.loggers.WandBLogger(project=args.wandb_logger, dir=logdir)
 
         # Graph
         logger.log_graph(model, example_input, 0)
+
+        # Configuration
+        args.extra = "key_out_of_order"
+        logger.log_config(vars(args), 0)
+        logger.log_config(vars(args), 1, False)
 
         # Audio
         logger.log_audio("sine 440Hz", audio_mono, 16_000, 1)
