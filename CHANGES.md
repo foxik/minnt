@@ -6,6 +6,7 @@ Version 1.0.5-dev
 - Fix incorrect recursive calls in `unpack_batch`.
 - The `WandBLogger.log_graph` method no longer tries to log the graph to WandB.
 - Add `sort_keys` option to `Logger.log_config` method.
+- Add `patience` option to `KeepBestWeights` and `SaveBestWeights` callbacks.
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
 
 
