@@ -37,7 +37,7 @@ a high-level API for training PyTorch models. It is a subclass of
 
 - The module keeps a collection of tracked [losses][minnt.TrainableModule.losses], and
   a collection of [metrics][minnt.TrainableModule.metrics] implementing the
-  [Metric][minnt.Metric] interface (e.g., any our metric or any metric from `torchmetric` package),
+  [Metric][npfl138.Metric] interface (e.g., any of our metrics or any metric from `torchmetrics` package),
   and is capable of storing the computed logs in text files, TensorBoard logs, WandB, or any
   implementation of the [Logger][minnt.Logger] interface.
 """
