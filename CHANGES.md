@@ -9,6 +9,7 @@ Version 1.0.5-dev
 - Add `patience` option to `KeepBestWeights` and `SaveBestWeights` callbacks.
 - Add `baseline` option to the `SaveBestWeights` callback.
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
+- Dynamically resize progress bar on window resize.
 
 
 Version 1.0.4 [24 Feb 2026]
