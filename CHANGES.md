@@ -12,6 +12,7 @@ Version 1.0.5-dev
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
 - Dynamically resize progress bar on window resize.
 - Do not consider norm layer subclasses in `initializers_override`.
+- Override also `InstanceNorm` epsilon in `global_keras_initializers`.
 
 
 Version 1.0.4 [24 Feb 2026]
