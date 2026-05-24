@@ -27,7 +27,7 @@ class TransformedDataset(torch.utils.data.Dataset):
 
     Warning:
       Given how PyTorch [torch.utils.data.DataLoader][] works, when specifying
-      [collate][minnt.TransformedDataset.collate] and/or [transform_batch][minnt.TransformedDataset.transform_batch],
+      [collate][minnt.TransformedDataset.collate] or [transform_batch][minnt.TransformedDataset.transform_batch],
       the `collate_fn` of the DataLoader **must** be set to `self.collate_fn`.
 
       This is automatically done when using the [dataloader][minnt.TransformedDataset.dataloader]
