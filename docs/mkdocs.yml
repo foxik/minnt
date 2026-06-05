@@ -14,6 +14,7 @@ nav:
 - vocabulary.md
 - Callbacks:
   - callback.md
+  - callbacks/early_stopping.md
   - callbacks/keep_best_weights.md
   - callbacks/save_best_weights.md
   - callbacks/save_weights.md

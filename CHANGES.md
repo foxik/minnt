@@ -9,6 +9,8 @@ Version 1.0.5-dev
 - Add `sort_keys` option to `Logger.log_config` method.
 - Add `patience` option to `KeepBestWeights` and `SaveBestWeights` callbacks.
 - Add `baseline` option to the `SaveBestWeights` callback.
+- Add `EarlyStopping` callback that stops training if a monitored metric
+  fails to improve for a given number of epochs.
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
 - Dynamically resize progress bar on window resize.
 - Do not consider norm layer subclasses in `initializers_override`.
