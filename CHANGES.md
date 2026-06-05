@@ -1,5 +1,5 @@
-Version 1.0.5-dev
------------------
+Version 1.0.5 [05 Jun 2026]
+---------------------------
 - If `predict_step` is a generator function, it is assumed to generate
   individual predicted items. This is a convenient alternative to generating
   full batches in `predict_step` and overriding `unpack_batch`.
