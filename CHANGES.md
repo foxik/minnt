@@ -13,6 +13,8 @@ Version 1.0.5-dev
   fails to improve for a given number of epochs.
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
 - Dynamically resize progress bar on window resize.
+- When wrapping a module by passing it to `TrainableModule` constructor,
+  correctly pass all arguments (both positional and keyword) in `forward`.
 - Do not consider norm layer subclasses in `initializers_override`.
 - Override also `InstanceNorm` epsilon in `global_keras_initializers`.
 
