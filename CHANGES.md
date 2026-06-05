@@ -12,6 +12,9 @@ Version 1.0.5-dev
 - Add `EarlyStopping` callback that stops training if a monitored metric
   fails to improve for a given number of epochs.
 - Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
+- If `predict_step` is a generator function, it is assumed to generate
+  individual predicted items. This is a convenient alternative to generating
+  full batches in `predict_step` and overriding `unpack_batch`.
 - Dynamically resize progress bar on window resize.
 - When wrapping a module by passing it to `TrainableModule` constructor,
   correctly pass all arguments (both positional and keyword) in `forward`.

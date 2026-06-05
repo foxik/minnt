@@ -42,8 +42,9 @@ a high-level API for training PyTorch models. It is a subclass of
   implementation of the [Logger][minnt.Logger] interface.
 """
 import argparse
-from collections.abc import Iterable
+from collections.abc import Generator, Iterable
 import functools
+import inspect
 import json
 import os
 import sys
@@ -112,6 +113,22 @@ def tensors_concatenate(x: list[TensorOrTensors] | tuple[TensorOrTensors, ...]) 
     elif isinstance(first, dict):
         return {k: tensors_concatenate([b[k] for b in x]) for k in first.keys()}
     raise RuntimeError(f"Cannot concatenate tensors of type {type(first)}.")
+
+
+def tensors_stack(x: list[TensorOrTensors]) -> TensorOrTensors:
+    """Stack a list of tensors or tensor structures along the first dimension."""
+    first = x[0]
+    if isinstance(first, torch.Tensor):
+        return torch.stack(x)
+    elif isinstance(first, torch.nn.utils.rnn.PackedSequence):
+        raise RuntimeError("Stack of torch.nn.utils.rnn.PackedSequence is not supported.")
+    elif isinstance(first, tuple):
+        return tuple(map(tensors_stack, zip(*x)))
+    elif isinstance(first, list):
+        return [tensors_stack(b) for b in zip(*x)]
+    elif isinstance(first, dict):
+        return {k: tensors_stack([b[k] for b in x]) for k in first.keys()}
+    raise RuntimeError(f"Cannot stack tensors of type {type(first)}.")
 
 
 def tensors_to_device(x: TensorOrTensors, device: torch.device) -> TensorOrTensors:
@@ -534,22 +551,35 @@ class TrainableModule(torch.nn.Module):
           predictions: An iterable whose elements are the individual predicted items.
         """
         assert self.device is not None, "No device has been set for the TrainableModule, run configure first."
+
+        predict_step_is_generator = inspect.isgeneratorfunction(self.predict_step)
         self.eval()
         for batch in ProgressLogger(dataloader, "Prediction", console):
             xs = validate_batch_input(batch, with_labels=data_with_labels)
             xs = tensors_to_device_as_tuple(xs, self.device)
             y = self.predict_step(xs)
-            y = self.unpack_batch(y, *xs) if not whole_batches else [y]
+            if predict_step_is_generator:
+                y = [tensors_stack(list(y))] if whole_batches else y
+            else:
+                y = self.unpack_batch(y, *xs) if not whole_batches else [y]
             yield from map(tensors_to_numpy, y) if as_numpy else y
 
-    def predict_step(self, xs: TensorOrTensors) -> TensorOrTensors:
+    def predict_step(self, xs: TensorOrTensors) -> TensorOrTensors | Generator[TensorOrTensors, None, None]:
         """An overridable method performing a single prediction step.
+
+        The result is either a single batch of predictions (that might be unpacked into individual
+        items by [unpack_batch][minnt.TrainableModule.unpack_batch]), or, if `predict_step`
+        is a generator function, an iterable of individual predicted items (i.e., an unpacked batch;
+        in this case, calls to [predict][minnt.TrainableModule.predict] with `whole_batches=True`
+        and to [predict_tensor][minnt.TrainableModule.predict_tensor] construct batches by stacking
+        individual items produced by `predict_step`).
 
         Parameters:
           xs: The input batch to the model, either a single tensor or a tensor structure.
 
         Returns:
-          predictions: The predicted batch.
+          predictions: The predicted batch or, if this method is a generator function, an iterable of
+            individual predicted items.
         """
         with torch.no_grad():
             return self(*xs)
@@ -583,7 +613,9 @@ class TrainableModule(torch.nn.Module):
         else:
             raise RuntimeError(f"Cannot unpack batch of type {type(y)} into individual items.")
 
-    def predict_batch(self, xs: TensorOrTensors, *, as_numpy: bool = False) -> TensorOrTensors:
+    def predict_batch(
+        self, xs: TensorOrTensors, *, as_numpy: bool = False,
+    ) -> TensorOrTensors | Iterable[TensorOrTensors]:
         """Run prediction on a single batch, returning the predicted batch.
 
         This method is a convenience wrapper around [predict_step][minnt.TrainableModule.predict_step].
@@ -604,13 +636,15 @@ class TrainableModule(torch.nn.Module):
             if `True`, they are converted to Numpy arrays.
 
         Returns:
-          predictions: The predicted batch.
+          predictions: The predicted batch, either a single tensor or a tensor structure, or, if `predict_step`
+            is a generator function, an iterable of individual predicted items (i.e., an unpacked batch).
         """
         assert self.device is not None, "No device has been set for the TrainableModule, run configure first."
         self.training and self.eval()
         xs = tensors_to_device_as_tuple(xs, self.device)
         y = self.predict_step(xs)
-        y = tensors_to_numpy(y) if as_numpy else y
+        if as_numpy:
+            y = map(tensors_to_numpy, y) if inspect.isgeneratorfunction(self.predict_step) else tensors_to_numpy(y)
         return y
 
     def predict_tensor(
