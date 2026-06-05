@@ -74,7 +74,7 @@ def main(args: argparse.Namespace) -> None:
 
     # Train the model.
     model.save_options("{logdir}/options.json", args=args)
-    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args), log_graph=True, callbacks=[
+    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args), callbacks=[
         minnt.callbacks.SaveBestWeights("{logdir}/best_model.pt", "dev:accuracy", mode="max"),
     ])
 

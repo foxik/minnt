@@ -74,7 +74,7 @@ def main(args: argparse.Namespace) -> None:
 
     # Train the model.
     best_weights = minnt.callbacks.KeepBestWeights("dev:accuracy", mode="max")
-    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args), log_graph=True, callbacks=[best_weights])
+    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args), callbacks=[best_weights])
 
     # Evaluate the model on the test data.
     model.evaluate(test)

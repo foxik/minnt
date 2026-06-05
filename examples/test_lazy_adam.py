@@ -79,7 +79,7 @@ def main(args: argparse.Namespace) -> None:
     configure(model, logdir=minnt.format_logdir("logs/{file-}{timestamp}{-config}", **vars(args)))
 
     # Train the model.
-    model.fit(train, dev=dev, epochs=args.epochs - 1, log_config=vars(args), log_graph=True)
+    model.fit(train, dev=dev, epochs=args.epochs - 1, log_config=vars(args))
 
     # Save and load the model including the LazyAdam optimizer.
     model.save_weights("{logdir}/model.pt", "optimizer.pt")

@@ -73,7 +73,7 @@ def main(args: argparse.Namespace) -> None:
     )
 
     # Train the model.
-    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args), log_graph=True)
+    model.fit(train, dev=dev, epochs=args.epochs, log_config=vars(args))
 
     # Evaluate the model on the test data.
     model.evaluate(test)

@@ -31,7 +31,8 @@ Epoch 3/10 loss=0.0440 accuracy=0.9850:  42%|███████▎         | 
 and furthermore (because `logdir` option of [configure][minnt.TrainableModule.configure] is specified),
 a directory `logs/0_trainable_module-YYYYMMDD_HHMMSS-...` is created, containing the training and evaluation logs
 both as plain text files and as TensorBoard logs (which can be browsed at `http://localhost:6006` after running
-the `tensorboard --logdir logs` command).
+the `tensorboard --logdir logs` command). In the example, we also log the graph, which is available
+both in TensorBoard and in `graph.txt` file in the logdir.
 
 
 ## Full Minnt Example
@@ -52,6 +53,8 @@ Below you can view the whole script or just the diff to the previous example.
 
 Note that the data loaders are now created using [minnt.TransformedDataset.dataloader][],
 and that the data processing now happens in [minnt.TransformedDataset.transform][].
+Additionally, we stopped logging the graph; since it requires tracing, it is
+a debugging tool rather than a production feature.
 
 We now illustrate several Minnt features and extensions by modifying
 this example.
@@ -221,9 +224,7 @@ trace file can be inspected in TensorBoard using the `torch-tb-profiler` plugin 
 using `pip install torch-tb-profiler`). Given number of steps (forward calls) are profiled (either
 during training or evaluation), after optional number of warmup steps.
 
-The example below profiles 2 steps after a warmup of 3 steps. Note that we disable graph logging to avoid
-profiling the corresponding graph tracing; we could have also used larger warmup (e.g., `warmup=5`)
-to achieve a similar effect.
+The example below profiles 2 steps after a warmup of 3 steps.
 
 A memory timeline is not generated in the example because it requires the Matplotlib package;
 you can try enabling it if you have it installed.

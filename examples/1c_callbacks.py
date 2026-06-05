@@ -88,7 +88,7 @@ def main(args: argparse.Namespace) -> None:
                 if not missing_classes:
                     break
 
-    model.fit(train, epochs=args.epochs, log_config=vars(args), log_graph=True, callbacks=[
+    model.fit(train, epochs=args.epochs, log_config=vars(args), callbacks=[
         evaluate_dev,
         dev_misclassifications,
     ])
