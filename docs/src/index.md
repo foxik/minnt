@@ -11,7 +11,7 @@ title: Minnt
 
 See the [Examples](examples.md). Install using:
 
-<pre style="clear: both"><code>pip install minnt --extra-index-url=https://download.pytorch.org/whl/cu128 torch torchvision</code></pre>
+<pre style="clear: both"><code>pip install minnt --extra-index-url=https://download.pytorch.org/whl/cu130 torch torchvision</code></pre>
 
 ---
 
