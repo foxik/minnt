@@ -1,3 +1,7 @@
+Version 1.0.6-dev
+-----------------
+
+
 Version 1.0.5 [05 Jun 2026]
 ---------------------------
 - If `predict_step` is a generator function, it is assumed to generate
