@@ -1,25 +1,25 @@
 Version 1.0.5-dev
 -----------------
+- If `predict_step` is a generator function, it is assumed to generate
+  individual predicted items. This is a convenient alternative to generating
+  full batches in `predict_step` and overriding `unpack_batch`.
+- Add `sort_keys` option to `Logger.log_config` method.
+- Add `EarlyStopping` callback that stops training if a monitored metric
+  fails to improve for a given number of epochs.
+- Add `patience` option to `KeepBestWeights` and `SaveBestWeights` callbacks.
+- Add `baseline` option to the `SaveBestWeights` callback.
+- Dynamically resize progress bar on window resize.
+- Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
 - Fix a crash in `TrainableModule.get_tb_writer` by using a correct method name.
 - Fix producing logs more frequently than `MINNT_REPORT_EACH` when more then
   10 seconds have elapsed between updates.
 - Fix incorrect recursive calls in `unpack_batch`.
-- The `WandBLogger.log_graph` method no longer tries to log the graph to WandB.
 - When overriding dataset limit, do not create a `Subset` dataset.
-- Add `sort_keys` option to `Logger.log_config` method.
-- Add `patience` option to `KeepBestWeights` and `SaveBestWeights` callbacks.
-- Add `baseline` option to the `SaveBestWeights` callback.
-- Add `EarlyStopping` callback that stops training if a monitored metric
-  fails to improve for a given number of epochs.
-- Export `StopTraining` type to replace the invalid `Literal[STOP_TRAINING]`.
-- If `predict_step` is a generator function, it is assumed to generate
-  individual predicted items. This is a convenient alternative to generating
-  full batches in `predict_step` and overriding `unpack_batch`.
-- Dynamically resize progress bar on window resize.
 - When wrapping a module by passing it to `TrainableModule` constructor,
   correctly pass all arguments (both positional and keyword) in `forward`.
 - Do not consider norm layer subclasses in `initializers_override`.
 - Override also `InstanceNorm` epsilon in `global_keras_initializers`.
+- The `WandBLogger.log_graph` method no longer tries to log the graph to WandB.
 
 
 Version 1.0.4 [24 Feb 2026]
