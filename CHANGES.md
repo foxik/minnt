@@ -1,3 +1,7 @@
+Version 1.0.7-dev
+-----------------
+
+
 Version 1.0.6 [12 Jun 2026]
 ---------------------------
 - In `TrainableModule`, move tensors with `non_blocking=True` in all code paths.
