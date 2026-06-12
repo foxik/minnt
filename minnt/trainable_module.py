@@ -532,7 +532,7 @@ class TrainableModule(torch.nn.Module):
     ) -> Iterable[TensorOrTensors]:
         """Compute predictions for the given dataset as a generator of individual items or whole batches.
 
-        None:
+        Note:
           To customize the prediction, you can override the [predict_step][minnt.TrainableModule.predict_step]
           and/or [unpack_batch][minnt.TrainableModule.unpack_batch] methods.
 
