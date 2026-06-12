@@ -744,12 +744,12 @@ class TrainableModule(torch.nn.Module):
 
         if device is not keep_previous or not self.device:
             self.device = get_auto_device() if device == "auto" or device is keep_previous else torch.device(device)
-        self.load_state_dict(torch.load(path, map_location=self.device))
+        self.load_state_dict(torch.load(path, map_location=self.device, weights_only=True))
 
         # Load the number of epochs, optimizer state, and the scheduler state when requested.
         if optimizer_path is not None:
             optimizer_path = os.path.join(os.path.dirname(path), optimizer_path)
-            optimizer_state = torch.load(optimizer_path, map_location=self.device)
+            optimizer_state = torch.load(optimizer_path, map_location=self.device, weights_only=True)
             self.epoch = optimizer_state["epoch"]
             if self.optimizer is not None:
                 assert "optimizer" in optimizer_state, "The optimizer state is missing."
