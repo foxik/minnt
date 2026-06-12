@@ -162,7 +162,7 @@ def tensors_to_device(x: TensorOrTensors, device: torch.device) -> TensorOrTenso
 def tensors_to_device_as_tuple(x: TensorOrTensors, device: torch.device) -> tuple[TensorOrTensors, ...]:
     """Asynchronously move input tensor data structure to a given device, returning a (possibly one-element) tuple."""
     if isinstance(x, (torch.Tensor, torch.nn.utils.rnn.PackedSequence)):
-        return (x.to(device),)
+        return (x.to(device, non_blocking=True),)
     elif isinstance(x, tuple_list):
         return tuple(tensors_to_device(a, device) for a in x)
     elif isinstance(x, dict):
