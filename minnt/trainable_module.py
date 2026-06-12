@@ -101,6 +101,8 @@ class static_or_instance_method:
 
 def tensors_concatenate(x: list[TensorOrTensors] | tuple[TensorOrTensors, ...]) -> TensorOrTensors:
     """Concatenate a list of tensors or tensor structures along the first dimension."""
+    if not x:
+        raise ValueError("Cannot concatenate an empty list/tuple of tensors.")
     first = x[0]
     if isinstance(first, torch.Tensor):
         return torch.cat(x)
@@ -117,6 +119,8 @@ def tensors_concatenate(x: list[TensorOrTensors] | tuple[TensorOrTensors, ...]) 
 
 def tensors_stack(x: list[TensorOrTensors]) -> TensorOrTensors:
     """Stack a list of tensors or tensor structures along the first dimension."""
+    if not x:
+        raise ValueError("Cannot stack an empty list of tensors.")
     first = x[0]
     if isinstance(first, torch.Tensor):
         return torch.stack(x)
