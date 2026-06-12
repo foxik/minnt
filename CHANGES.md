@@ -1,5 +1,5 @@
-Version 1.0.6-dev
------------------
+Version 1.0.6 [12 Jun 2026]
+---------------------------
 - In `TrainableModule`, move tensors with `non_blocking=True` in all code paths.
 - Explicitly pass `weights_only=True` to `torch.load` for consistency and safety
   in older PyTorch installations.
