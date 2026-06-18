@@ -43,6 +43,7 @@ class KeepBestWeights(Callback):
 
         self.best_state_dict = None
         self.best_value = None
+        self.best_epoch = None
 
     best_state_dict: dict | None
     """The state dictionary containing the copies of best weights encountered so far."""
@@ -50,11 +51,15 @@ class KeepBestWeights(Callback):
     best_value: float | None = None
     """The best metric value seen so far."""
 
+    best_epoch: int | None
+    """The epoch number where the best metric value was seen."""
+
     def __call__(self, module: "TrainableModule", epoch: int, logs: Logs) -> StopTraining | None:
         if (self.best_value is None
                 or (self._mode == "max" and logs[self._metric] > self.best_value)
                 or (self._mode == "min" and logs[self._metric] < self.best_value)):
             self.best_value = logs[self._metric]
+            self.best_epoch = epoch
             self.best_state_dict = {k: v.to(device=self._device, copy=True)
                                     for k, v in module.state_dict().items()}
             self._epochs_without_improvement = 0

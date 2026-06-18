@@ -50,15 +50,20 @@ class SaveBestWeights(Callback):
         self._epochs_without_improvement = 0
 
         self.best_value = None
+        self.best_epoch = None
 
     best_value: float | None
     """The best metric value seen so far."""
+
+    best_epoch: int | None
+    """The epoch number where the best metric value was seen."""
 
     def __call__(self, module: "TrainableModule", epoch: int, logs: Logs) -> StopTraining | None:
         if (self.best_value is None
                 or (self._mode == "max" and logs[self._metric] > self.best_value)
                 or (self._mode == "min" and logs[self._metric] < self.best_value)):
             self.best_value = logs[self._metric]
+            self.best_epoch = epoch
             self._epochs_without_improvement = 0
 
             if (self._baseline is None
