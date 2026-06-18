@@ -79,7 +79,9 @@ def main(args: argparse.Namespace) -> None:
     # Evaluate the model on the test data.
     model.evaluate(test)
 
-    print(f"Restoring the weights reaching the best dev accuracy {best_weights.best_value:.4f}.")
+    print(f"Restoring the weights reaching the best dev accuracy {best_weights.best_value:.4f} "
+          f"from epoch {best_weights.best_epoch}.")
+
     model.load_state_dict(best_weights.best_state_dict)
 
     model.evaluate(test)
