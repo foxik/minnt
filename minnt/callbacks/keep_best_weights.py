@@ -48,7 +48,7 @@ class KeepBestWeights(Callback):
     best_state_dict: dict | None
     """The state dictionary containing the copies of best weights encountered so far."""
 
-    best_value: float | None = None
+    best_value: float | None
     """The best metric value seen so far."""
 
     best_epoch: int | None
