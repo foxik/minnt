@@ -20,6 +20,7 @@ class KeepBestWeights(Callback):
         mode: Literal["max", "min"] = "max",
         device: str | None = None,
         *,
+        baseline: float | None = None,
         patience: int | None = None,
     ) -> None:
         """Create the KeepBestWeights callback.
@@ -30,6 +31,8 @@ class KeepBestWeights(Callback):
             or minimized.
           device: The device where the weights will be stored. If `None`, the weights will be stored
             on the same device as the model.
+          baseline: When set, the monitored metric must surpass this value for the model weights
+            to be actually saved.
           patience: When `patience` is not `None`, the callback stops the training if the monitored
             metric does not improve for `patience` consecutive epochs.
         """
@@ -38,6 +41,7 @@ class KeepBestWeights(Callback):
         self._metric = metric
         self._mode = mode
         self._device = device
+        self._baseline = baseline
         self._patience = patience
         self._epochs_without_improvement = 0
 
@@ -60,9 +64,13 @@ class KeepBestWeights(Callback):
                 or (self._mode == "min" and logs[self._metric] < self.best_value)):
             self.best_value = logs[self._metric]
             self.best_epoch = epoch
-            self.best_state_dict = {k: v.to(device=self._device, copy=True)
-                                    for k, v in module.state_dict().items()}
             self._epochs_without_improvement = 0
+
+            if (self._baseline is None
+                    or (self._mode == "max" and self.best_value > self._baseline)
+                    or (self._mode == "min" and self.best_value < self._baseline)):
+                self.best_state_dict = {k: v.to(device=self._device, copy=True)
+                                        for k, v in module.state_dict().items()}
         else:
             self._epochs_without_improvement += 1
 

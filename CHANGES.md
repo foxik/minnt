@@ -1,6 +1,7 @@
 Version 1.0.7-dev
 -----------------
 - Add `best_epoch` attribute to `SaveBestWeights` and `KeepBestWeights`.
+- Add `baseline` option to the `KeepBestWeights` callback.
 
 
 Version 1.0.6 [12 Jun 2026]
