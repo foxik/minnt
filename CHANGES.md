@@ -2,6 +2,8 @@ Version 1.0.7-dev
 -----------------
 - Add `best_epoch` attribute to `SaveBestWeights` and `KeepBestWeights`.
 - Add `baseline` option to the `KeepBestWeights` callback.
+- In `format_logdir`, allow specifying the maximum width of the `config`
+  placeholder using a precision limit, i.e., `{config:.N}.
 
 
 Version 1.0.6 [12 Jun 2026]
