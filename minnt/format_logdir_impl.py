@@ -57,7 +57,7 @@ def format_logdir(logdir_template: str, **kwargs: Any) -> str:
     target_len = max(map(int, re.findall(r"\{[-_]?config[-_]?:[^{}]*\.(\d+)[^{}]*\}", logdir_template)), default=200)
     items = [(re.sub("(.)[^-_]*[-_]?", r"\1", str(k)), str(v)) for k, v in sorted(kwargs.items())]
     if sum(len(k) + 1 + min(len(v), 5) + 1 for k, v in items) - 1 > target_len:
-        raise ValueError("Signature is too long to fit even with maximum truncation.")
+        raise ValueError("Config placeholder is too long to fit even with maximum truncation.")
 
     if items:
         limit = max(len(v) for k, v in items)
