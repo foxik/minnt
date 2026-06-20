@@ -22,7 +22,7 @@ def format_logdir(logdir_template: str, **kwargs: Any) -> str:
     - `{config}`: A comma-separated list of `key=value` pairs for sorted key-value items in `kwargs`.
         The keys are abbreviated to their first character per segment (with segments separated by
         hyphens or underscores). The maximum length of the placeholder is limited to 200 characters;
-        if exceeded, the longest entries are truncated with ellipses (`...`) to fit within the limit.
+        if exceeded, the longest entries are truncated with a tilde (`~`) to fit within the limit.
         To override the 200-character default, specify a precision limit (e.g., `{config:.N}`);
         if multiple limits are defined, the largest value applies to all `config` placeholders.
     - `{file}`: The base name of the script file (without extension) that called this function;
@@ -56,14 +56,14 @@ def format_logdir(logdir_template: str, **kwargs: Any) -> str:
     # Create {config} placeholder.
     target_len = max(map(int, re.findall(r"\{[-_]?config[-_]?:[^{}]*\.(\d+)[^{}]*\}", logdir_template)), default=200)
     items = [(re.sub("(.)[^-_]*[-_]?", r"\1", str(k)), str(v)) for k, v in sorted(kwargs.items())]
-    if sum(len(k) + 1 + min(len(v), 5) + 1 for k, v in items) - 1 > target_len:
+    if sum(len(k) + 1 + min(len(v), 3) + 1 for k, v in items) - 1 > target_len:
         raise ValueError("Config placeholder is too long to fit even with maximum truncation.")
 
     if items:
         limit = max(len(v) for k, v in items)
-        while sum(len(k) + 1 + min(len(v), limit) + 1 for k, v in items) - 1 > target_len:  # false for limit == 5
+        while sum(len(k) + 1 + min(len(v), limit) + 1 for k, v in items) - 1 > target_len:  # false for limit == 3
             limit -= 1
-        items = [(k, v if len(v) <= limit else v[:limit // 2 - 1] + "..." + v[-limit // 2 + 2:]) for k, v in items]
+        items = [(k, v if len(v) <= limit else v[:limit // 2] + "~" + v[-limit // 2 + 1:]) for k, v in items]
     kwargs["config"] = ",".join(f"{k}={v}" for k, v in items)
 
     # Create {file} placeholder.
