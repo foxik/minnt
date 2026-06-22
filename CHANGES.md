@@ -1,3 +1,7 @@
+Version 1.1.1-dev
+-----------------
+
+
 Version 1.1.0 [22 Jun 2026]
 ---------------------------
 - Add `best_epoch` attribute to `SaveBestWeights` and `KeepBestWeights`.
