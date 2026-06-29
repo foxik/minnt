@@ -1,3 +1,7 @@
+Version 1.1.2-dev
+-----------------
+
+
 Version 1.1.1 [29 Jun 2026]
 ---------------------------
 - Increase `tensorboard` dependency to 2.21 to avoid the issue with
