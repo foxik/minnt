@@ -1,5 +1,7 @@
 Version 1.1.1-dev
 -----------------
+- Increase `tensorboard` dependency to 2.21 to avoid the issue with
+  `tensorboard` <= 2.20 utilizing deprecated `pkg_resources`.
 
 
 Version 1.1.0 [22 Jun 2026]
