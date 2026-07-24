@@ -25,7 +25,7 @@ def startup(
     - Set the number of threads if given.
     - Use `forkserver` instead of `fork` multiprocessing start method unless disallowed.
     - Allow using TF32 for matrix multiplication unless disallowed.
-    - Enable expandable segments in the CUDA memory allocator unless disallowed.
+    - Enable expandable segments in the CUDA/ROCm memory allocator unless disallowed.
 
     Parameters:
       seed: If not `None`, set the Python, Numpy, and PyTorch random seeds to this value.
@@ -34,7 +34,7 @@ def startup(
       forkserver_instead_of_fork: If `True`, use `forkserver` instead of `fork` as the
         default start multiprocessing method. This will be the default one in Python 3.14.
       allow_tf32: If `False`, disable TF32 for matrix multiplication even when available.
-      expandable_segments: If `True`, enable expandable segments in the CUDA memory allocator;
+      expandable_segments: If `True`, enable expandable segments in the CUDA/ROCm memory allocator;
         if `False`, disable them; if `None`, do not change the current setting.
 
     **Environment variables:** The following environment variables can be used
@@ -73,14 +73,15 @@ def startup(
         allow_tf32 = os.environ.get("MINNT_ALLOW_TF32") == "1"
     torch.backends.cuda.matmul.allow_tf32 = allow_tf32
 
-    # On NVIDIA GPUs, allow or disallow expandable segments in the CUDA memory allocator if requested.
+    # On CUDA/ROCm, allow or disallow expandable segments in the memory allocator if requested.
     if os.environ.get("MINNT_EXPANDABLE_SEGMENTS") in ["0", "1"]:
         expandable_segments = os.environ.get("MINNT_EXPANDABLE_SEGMENTS") == "1"
     if expandable_segments is not None:
         expandable_segments = bool(expandable_segments)
         env_variables = [os.environ.get(k, "") for k in ("PYTORCH_ALLOC_CONF", "PYTORCH_CUDA_ALLOC_CONF")]
         if not any(f"expandable_segments:{str(not expandable_segments)}" in env_var for env_var in env_variables):
-            if torch.cuda.is_available() and torch.version.cuda and "linux" in sys.platform:
+            if torch.cuda.is_available() and "linux" in sys.platform \
+                    and (torch.version.cuda or (torch.__version__ >= "2.12" and torch.version.rocm)):
                 # Since PyTorch 2.10, we need to use the accelerator API instead of CUDA to set expandable segments.
                 set_allocator_settings = getattr(torch._C, "_accelerator_setAllocatorSettings", None)
                 set_allocator_settings = set_allocator_settings or torch.cuda.memory._set_allocator_settings
