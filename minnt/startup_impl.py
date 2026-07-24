@@ -80,7 +80,7 @@ def startup(
         expandable_segments = bool(expandable_segments)
         env_variables = [os.environ.get(k, "") for k in ("PYTORCH_ALLOC_CONF", "PYTORCH_CUDA_ALLOC_CONF")]
         if not any(f"expandable_segments:{str(not expandable_segments)}" in env_var for env_var in env_variables):
-            if torch.cuda.is_available() and torch.version.cuda and "win" not in sys.platform:
+            if torch.cuda.is_available() and torch.version.cuda and "linux" in sys.platform:
                 # Since PyTorch 2.10, we need to use the accelerator API instead of CUDA to set expandable segments.
                 set_allocator_settings = getattr(torch._C, "_accelerator_setAllocatorSettings", None)
                 set_allocator_settings = set_allocator_settings or torch.cuda.memory._set_allocator_settings
